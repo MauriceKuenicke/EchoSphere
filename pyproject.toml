@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "EchoSphere"
+version = "v0.0.0"
+authors = [
+    { name="Maurice Künicke", email="mail" },
+]
+description = "<Fill Later>"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "typer",
+    "snowflake-connector-python"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "typer",
+    "snowflake-connector-python"
+]
+
+[project.scripts]
+es = "echosphere.main:app"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["D", "I", "PL", "RUF", "F", "W"]
+ignore = ["D200", "D212", "D203", "D104", "D100", "D103", "PLR2004", "D205", "D415", "D400", "D401",
+    "W191", "PLR0913", "PLR0915", "RUF100", "D206"]
+fixable = ["I001", "W292"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"test_*" = ["D102", "D101"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+exclude = [
+    '^file1\.py$',   # TOML literal string (single-quotes, no escaping necessary)
+]
+strict = true
+ignore_missing_imports = true
+implicit_reexport = true
+
+[tool.coverage.run]
+source = ['echosphere']
+omit = ['*/__init__.py', '/tests/*']
+
+[tool.coverage.report]
+exclude_also = [
+    "def test_",
+    "if self.debug",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
