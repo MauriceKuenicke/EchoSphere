@@ -33,7 +33,7 @@ This project is currently not safe for use in a production environment. Use at y
 
 ## Installation
 ```sh
-pip install https://github.com/MauriceKuenicke/EchoSphere
+pip install git+https://github.com/MauriceKuenicke/EchoSphere
 ```
 
 ## Setup
