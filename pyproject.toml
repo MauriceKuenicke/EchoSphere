@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "EchoSphere"
 version = "v0.0.0"
 authors = [
-    { name="Maurice Künicke", email="mail" },
+    { name="Maurice Künicke", email="m.kuenicke1995@gmail.com" },
 ]
 description = "<Fill Later>"
 readme = "README.md"
