@@ -27,7 +27,7 @@ This project is currently not safe for use in a production environment. Use at y
 # Usage
 
 <p align="center">
-  <img src="docs/assets/example.png" alt="Example Output" width="60%">
+  <img src="docs/assets/example.PNG" alt="Example Output" width="60%">
 </p>
 
 
