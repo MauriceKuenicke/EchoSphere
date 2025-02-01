@@ -51,6 +51,19 @@ As soon as a single row is returned, EchoSphere labels the test as failed.
 SQL statements should not use full-path definitions for tables to allow for more flexibility when setting up
 agents.
 
+Example:
+```sql
+SELECT * FROM
+    (SELECT
+         SUM(O_TOTALPRICE) AS "SUM_TOTALPRICE"
+     FROM ORDERS
+     WHERE O_ORDERDATE = '1995-02-19')
+WHERE "SUM_TOTALPRICE" <> 944870465.07;
+```
+This query will check that the sum of the total order prices for a past date matches an expected value.
+If the values do not match, 
+this query will return a single row containing the actual number calculated at runtime during the test.
+
 ## Environment Management
 Different Snowflake environments (Agents) are managed in the `es.ini` file.
 
