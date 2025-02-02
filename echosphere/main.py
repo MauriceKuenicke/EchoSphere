@@ -1,16 +1,48 @@
 import typer
 import os
+import sys
 import glob
 from rich.console import Console
 from rich.table import Table
 import snowflake.connector
-from typing import Optional
 from rich import print
 import concurrent.futures
 from snowflake.connector import ProgrammingError
 from echosphere.ConfigParser import SnowflakeAgentConfig
 from typing_extensions import Annotated
 import time
+from typing import Optional
+
+
+def get_sql_test_files(path: Optional[str] = "./es_suite") -> dict[str, str]:
+    """
+    Generates a dictionary of SQL test file identifiers and their corresponding file paths
+    from the specified directory. The function searches for files with the `.es.sql` extension
+    within the provided directory path and creates a mapping where the keys are the base names
+    of the files (without the `.es.sql` suffix) and the values are the full paths to those files.
+
+    :param path: Optional; Directory path where the `.es.sql` test files are stored. If not
+                 specified, defaults to "./es_suite".
+    :type path: Optional[str]
+
+    :return: A dictionary mapping the base names of the `.es.sql` files (without the file
+             extension) to their full paths.
+    """
+    pattern = os.path.join(path, '*.es.sql')
+    files = glob.glob(pattern)
+    base_names = {os.path.basename(f)[:-7]: f
+                  for f in files}
+    return base_names
+
+def display_test_names_table() -> None:
+    test_files = get_sql_test_files()
+    if len(test_files.keys()) == 0:
+        print(f"[bold red]No tests detected.[/red bold]")
+        sys.exit(-1)
+    table = Table("To be executed")
+    for i in test_files.keys():
+        table.add_row(i)
+    console.print(table)
 
 console = Console()
 
@@ -24,7 +56,7 @@ app = typer.Typer(
 )
 
 
-def run_async_test_and_poll(file_path: str, agent: Optional[str]):
+def run_async_test_and_poll(test_name: str, test_file_path: str, agent: Optional[str]):
     test_run_successful = False
     sf_agent = SnowflakeAgentConfig(agent_name=agent)
     with snowflake.connector.connect(
@@ -41,8 +73,7 @@ def run_async_test_and_poll(file_path: str, agent: Optional[str]):
             application="EchoSphere"
     ) as conn:
         cur = conn.cursor()
-        test_name = os.path.basename(file_path)[:-7]
-        with open(file_path, "r") as s:
+        with open(test_file_path, "r") as s:
             sql = s.read()
 
         start_time = time.time()
@@ -80,27 +111,19 @@ def run_suite(agent: Annotated[Optional[str], typer.Option(..., "--agent", "-a",
     Run all tests.
     :return:
     """
-    path = "./es_suite"
-    pattern = os.path.join(path, '*.es.sql')
-    files = glob.glob(pattern)
     s_t = time.time()
     print("================================================================")
     print("[bold]Test Suite[/bold]")
     print("================================================================")
-
-    base_names = [os.path.basename(f)[:-7] for f in files]
-    table = Table("To be executed")
-    for i in base_names:
-        table.add_row(i)
-    console.print(table)
-
+    display_test_names_table()
     print("================================================================")
     print("[bold]Starting Async EchoSphere Test Run[/bold]")
     print("================================================================")
 
     results = []
+    test_files = get_sql_test_files()
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-        futures = [executor.submit(run_async_test_and_poll, f, agent) for f in files]
+        futures = [executor.submit(run_async_test_and_poll, t_n, t_fp, agent) for t_n, t_fp in test_files.items()]
         for future in concurrent.futures.as_completed(futures):
             results.append(future.result())
 
@@ -109,27 +132,29 @@ def run_suite(agent: Annotated[Optional[str], typer.Option(..., "--agent", "-a",
     print("================================================================")
     if len(results) == 0:
         print("[bold]No Tests Executed.[/bold]")
+        sys.exit(-1)
     if all(results):
         print(f"[bold green]Test Run Successful. [/green bold][yellow bold]{cum_t}s[/yellow bold]")
     else:
         print(f"[bold red]Test Run Failed. [/red bold][yellow bold]{cum_t}s[/yellow bold]")
+        sys.exit(-1)
 
 
 @app.command(name="list",
              help="""List current test suite.""")
-def run_suite():
+def list_test_suite():
     """
-    List current tests that would be executed.
-    :return:
+    List current test suite.
+
+    This command retrieves a list of SQL test files and presents them in a
+    structured table format. It uses the `Table` utility for formatting the
+    output and prints it to the console.
+
+    :raises RuntimeError: If there are issues in retrieving test files or
+        displaying the table on the console.
+    :return: None
     """
-    path = "./es_suite"
-    pattern = os.path.join(path, '*.es.sql')
-    files = glob.glob(pattern)
-    base_names = [os.path.basename(f)[:-7] for f in files]
-    table = Table("Tests")
-    for i in base_names:
-        table.add_row(i)
-    console.print(table)
+    display_test_names_table()
 
 
 @app.command(name="setup",
