@@ -1,0 +1,55 @@
+site_name: EchoSphere
+site_url: https://mydomain.org/mysite
+repo_url: https://github.com/MauriceKuenicke/EchoSphere
+repo_name: MauriceKuenicke/EchoSphere
+theme:
+  icon:
+    logo: material/sphere
+    repo: fontawesome/brands/github
+
+  language: en
+
+  name: material
+  custom_dir: docs/overrides
+
+  font:
+    text: Nunito
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - search.suggest
+    - search.share
+
+plugins:
+  - search
+
+copyright: Copyright &copy; 2025 - Maurice Künicke
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MauriceKuenicke
+      name: Maurice on GitHub
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/maurice-k%C3%BCnicke-429a211a3/
+      name: Maurice on LinkedIn
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list

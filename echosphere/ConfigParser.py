@@ -4,7 +4,7 @@ from configparser import ConfigParser
 class SnowflakeAgentConfig:
     def __init__(self, agent_name: str = None):
         config = ConfigParser()
-        config.read('es.ini')
+        config.read("es.ini")
         if not agent_name:
             default_agent = config.get("default", "agent")
         else:
