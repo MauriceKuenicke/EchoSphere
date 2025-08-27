@@ -1,4 +1,13 @@
+"""
+Display helpers for EchoSphere test suite output.
+
+This module renders a table of discovered tests and prints the SQL code
+of a specific test. It follows the docstring style demonstrated in
+`echosphere.utils.sql_test_fetcher`.
+"""
+
 import sys
+from typing import Optional
 
 from rich import print
 from rich.console import Console
@@ -14,12 +23,29 @@ ERROR_EXIT_CODE = -1
 
 
 def display_no_tests_error() -> None:
-    """Display an error message when no tests are found and exit."""
+    """
+    Display an error and exit when no tests are found.
+
+    Prints a bold red message and terminates the process with a
+    non-zero exit code to indicate an error state.
+
+    :return: None
+    """
     print(f"[bold red]{NO_TESTS_MESSAGE}[/red bold]")
     sys.exit(ERROR_EXIT_CODE)
 
 
-def display_test_names_table(subdir: str | None = None) -> None:
+def display_test_names_table(subdir: Optional[str] = None) -> None:
+    """
+    Render a table of discovered test names.
+
+    The table lists the base names of `.es.sql` files. If a test resides in a
+    subsuite (subdirectory), the displayed name will be `subsuite/<test>`.
+
+    :param subdir: Optional subsuite name. If provided, only tests within
+                   this subsuite are shown. If None, shows all tests.
+    :return: None
+    """
     test_files = get_sql_test_files(subdir=subdir)
     if not test_files:
         display_no_tests_error()
@@ -40,7 +66,17 @@ ERROR_READING_FILE = "[bold red]Error:[/bold red] Failed to read test file: {}"
 
 
 def display_test_sql_code(test_identifier: str) -> None:
-    subsuite = None
+    """
+    Print the SQL content for a given test identifier.
+
+    The identifier can be provided as either `<test_name>` or
+    `<subsuite>/<test_name>`. The test name is case-insensitive.
+
+    :param test_identifier: Name of the test to display. May include an
+                            optional subsuite prefix separated by `/`.
+    :return: None
+    """
+    subsuite: Optional[str] = None
     test_name = test_identifier
     if "/" in test_identifier:
         subsuite, test_name = test_identifier.split("/")

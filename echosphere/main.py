@@ -12,8 +12,8 @@ from snowflake.connector import ProgrammingError
 from typing_extensions import Annotated
 
 from echosphere.commands import view
-from echosphere.ConfigParser import SnowflakeAgentConfig
 from echosphere.core.setup_es import PlatformEnum, init_es
+from echosphere.env_config_parser.SnowflakeEnvConfigParser import SnowflakeAgentConfig
 
 console = Console()
 

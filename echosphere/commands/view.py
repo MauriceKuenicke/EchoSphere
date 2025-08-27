@@ -13,17 +13,13 @@ def list_test_suite(
     subdir: Optional[str] = typer.Option(None, "-s", "--suite", help="Filter tests by subsuite"),
 ) -> None:
     """
-    List current test suite.
+    List the current test suite in a table format.
 
-    This command retrieves a list of SQL test files and presents them in a
-    structured table format.
-    It uses the `Table` utility for formatting the
-    output and prints it to the console.
+    Retrieves all `.es.sql` tests and prints a table to stdout.
+    Optionally filters by subsuite.
 
-    Options:
-        -a, --all: Show all tests in the suite
-        -d, --suite: Show only tests in the specified subsuite
-
+    :param all_tests: If True, ignore `subdir` and show all tests.
+    :param subdir: Optional subsuite to filter by when `all_tests` is False.
     :return: None
     """
     if all_tests and subdir:
@@ -35,4 +31,11 @@ def list_test_suite(
 
 @app.command(name="test", help="View the SQL code for a given test file.")
 def view_test_sql(name: str) -> None:
+    """
+    Print the SQL code for the specified test.
+
+    :param name: Test identifier, optionally including subsuite as
+                 `<subsuite>/<test_name>`.
+    :return: None
+    """
     display_test_sql_code(name)
