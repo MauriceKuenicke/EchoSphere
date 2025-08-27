@@ -14,7 +14,7 @@ def set_cwd_to_repo_root() -> None:
 @pytest.fixture(scope="session")
 def example_suites_path() -> Path:
     # Use the repository-provided example suite for tests
-    return Path("tests") / "example_suites"
+    return Path("tests") / "example_suite"
 
 
 @pytest.fixture(autouse=True)
