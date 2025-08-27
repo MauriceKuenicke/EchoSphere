@@ -13,12 +13,13 @@ from typing_extensions import Annotated
 
 from echosphere.commands import view
 from echosphere.ConfigParser import SnowflakeAgentConfig
+from echosphere.core.setup_es import PlatformEnum, init_es
 
 console = Console()
 
 app = typer.Typer(
     name="EchoSphere Testing Suite",
-    help="Database Testing Suite.",
+    help="EchoSphere Testing Suite.",
     context_settings={"help_option_names": ["-h", "--help"]},
     add_completion=False,
     pretty_exceptions_show_locals=True,
@@ -26,6 +27,16 @@ app = typer.Typer(
 )
 
 app.add_typer(view.app, name="view")
+
+
+@app.command(name="setup", help="Create the necessary setup.")
+def configure_setup(platform: PlatformEnum = typer.Option(None, help="Platform to configure.")):
+    if platform is None:
+        console.print(
+            "[bold red]Error:[/bold red] Please specify a platform. Use [bold green]--help[/bold green] for more info."
+        )
+        raise typer.Exit(code=-1)
+    init_es(platform)
 
 
 def run_async_test_and_poll(test_name: str, test_file_path: str, agent: Optional[str]):
@@ -120,50 +131,6 @@ def run_suite(
     else:
         print(f"[bold red]Test Run Failed. [/red bold][yellow bold]{cum_t}s[/yellow bold]")
         sys.exit(-1)
-
-
-@app.command(name="setup", help="""Create the necessary setup.""")
-def configure_setup():
-    """
-    Setup
-    :return:
-    """
-    path = "./es_suite"
-    if not os.path.exists(path):
-        os.mkdir(path)
-    else:
-        raise Exception("Sub-Directory already exists.")
-
-    filename = os.path.join(path, "EXAMPLE.es.sql")
-    with open(filename, "w") as file:
-        file.write(
-            "-- This is a sample SQL query. Each test query should return zero rows if the test was successful.\n"
-        )
-        file.write("SELECT * FROM table_name;\n")
-
-    with open("es.ini", "w") as ini_file:
-        example = """[default]
-agent = agent.snowflake.dev
-
-[agent.snowflake.dev]
-user = ...
-password = ...
-account = ...
-warehouse =...
-role = ...
-database = ...
-schema = ...
-
-[agent.snowflake.prod]
-user = ...
-password = ...
-account = ...
-warehouse = ...
-role = ...
-database = ...
-schema = ...
-"""
-        ini_file.write(example)
 
 
 if __name__ == "__main__":

@@ -38,6 +38,7 @@ def display_test_names_table(subdir: str | None = None) -> None:
 ERROR_TEST_NOT_FOUND = "[bold red]Error:[/bold red] Test '{}' not found."
 ERROR_READING_FILE = "[bold red]Error:[/bold red] Failed to read test file: {}"
 
+
 def display_test_sql_code(test_identifier: str) -> None:
     subsuite = None
     test_name = test_identifier
