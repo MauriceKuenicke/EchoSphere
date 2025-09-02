@@ -4,14 +4,8 @@ from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner
 
 
-FAILED_TEST_MESSAGE = """
-{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]
-{sql}\nMore than zero rows ({row_count}) detected.[/red]
-"""
-
-SUCCESS_TEST_MESSAGE = """
-{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]
-"""
+FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"
+SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
 
 def run_async_test_and_poll(test_name: str, test_file_path: str, env: Optional[str]) -> bool:
     """
