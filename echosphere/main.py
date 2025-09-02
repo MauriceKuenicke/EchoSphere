@@ -14,6 +14,8 @@ from typing_extensions import Annotated
 from echosphere.commands import view
 from echosphere.core.setup_es import PlatformEnum, init_es
 from echosphere.env_config_parser.SnowflakeEnvConfigParser import SnowflakeAgentConfig
+from echosphere.utils.sql_test_fetcher import get_sql_test_files
+from echosphere.core.suite_display import display_test_names_table
 
 console = Console()
 
@@ -116,7 +118,7 @@ def run_suite(
     results = []
     test_files = get_sql_test_files()
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-        futures = [executor.submit(run_async_test_and_poll, t_n, t_fp, agent) for t_n, t_fp in test_files.items()]
+        futures = [executor.submit(run_async_test_and_poll, t_n, t_fp["full_path"], agent) for t_n, t_fp in test_files.items()]
         for future in concurrent.futures.as_completed(futures):
             results.append(future.result())
 

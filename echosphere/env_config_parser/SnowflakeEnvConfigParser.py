@@ -35,7 +35,7 @@ class SnowflakeAgentConfig:
         config = ConfigParser()
         config.read("es.ini")
         if not agent_name:
-            default_agent = config.get("default", "agent")
+            default_agent = config.get("default", "env")
         else:
             default_agent = agent_name
 

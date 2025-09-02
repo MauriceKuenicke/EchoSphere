@@ -66,11 +66,14 @@ def setup_es_directory(dir_name: str) -> None:
     if es_suite_path.exists():
         typer.echo(f"Directory '{dir_name}' already exists. Skipping creation.")
         return
-
     es_suite_path.mkdir()
-    example_query_content = get_resource_path(EXAMPLE_QUERY_DIR, "EXAMPLE.es.sql").read_text()
-    example_query_path = es_suite_path / "EXAMPLE.es.sql"
-    create_file_if_not_exists(example_query_path, example_query_content)
+
+    example_query_dir_path = importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}")
+    for sql_file in example_query_dir_path.iterdir():
+        if ".sql" in sql_file.name:
+            example_query_content = sql_file.read_text()
+            example_query_path = es_suite_path / sql_file.name
+            create_file_if_not_exists(example_query_path, example_query_content)
     typer.echo(f"Created '{dir_name}' directory with example query file.")
 
 
