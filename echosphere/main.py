@@ -9,10 +9,10 @@ from rich.console import Console
 from typing_extensions import Annotated
 
 from echosphere.commands import view
-from echosphere.core.setup_es import PlatformEnum, init_es
 from echosphere.core.run_async_tests import run_async_test_and_poll
-from echosphere.utils.sql_test_fetcher import get_sql_test_files
+from echosphere.core.setup_es import PlatformEnum, init_es
 from echosphere.core.suite_display import display_test_names_table
+from echosphere.utils.sql_test_fetcher import get_sql_test_files
 
 console = Console()
 
@@ -30,7 +30,8 @@ app.add_typer(view.app, name="view")
 
 @app.command(name="setup", help="Create the necessary setup.")
 def configure_setup(platform: PlatformEnum = typer.Option(None, help="Platform to configure.")) -> None:
-    """Initialize EchoSphere for the selected platform by creating config and example suite.
+    """
+    Initialize EchoSphere for the selected platform by creating config and example suite.
 
     :param platform: Target platform to configure (e.g., PlatformEnum.SNOWFLAKE).
     :return: None
@@ -75,7 +76,10 @@ def run_suite(
     results = []
     test_files = get_sql_test_files()
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-        futures = [executor.submit(run_async_test_and_poll, t_n, t_fp["full_path"], env) for t_n, t_fp in test_files.items()]
+        futures = [
+            executor.submit(run_async_test_and_poll, t_n, t_fp["full_path"], env)  # type: ignore[arg-type]
+            for t_n, t_fp in test_files.items()
+        ]
         for future in concurrent.futures.as_completed(futures):
             results.append(future.result())
 

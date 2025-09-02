@@ -1,13 +1,13 @@
-from typing import Optional
 from rich import print
-from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
-from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner
 
+from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner
+from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 
 FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"
 SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
 
-def run_async_test_and_poll(test_name: str, test_file_path: str, env: Optional[str]) -> bool:
+
+def run_async_test_and_poll(test_name: str, test_file_path: str, env: str | None) -> bool:
     """
     Run a single SQL test asynchronously on the configured platform and evaluate its result.
 
@@ -28,9 +28,9 @@ def run_async_test_and_poll(test_name: str, test_file_path: str, env: Optional[s
         raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake]")
 
     if row_count:
-        error_msg = FAILED_TEST_MESSAGE.format(test_name=test_name,
-                                               execution_time=execution_time,
-                                               sql=sql, row_count=row_count)
+        error_msg = FAILED_TEST_MESSAGE.format(
+            test_name=test_name, execution_time=execution_time, sql=sql, row_count=row_count
+        )
         print(error_msg)
         return False
 

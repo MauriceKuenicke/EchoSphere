@@ -7,7 +7,8 @@ class PlatformExtractor:
 
     @classmethod
     def extract_platform_info(cls, env_name: Optional[str] = None) -> str:
-        """Return the active platform name from es.ini in lower-case.
+        """
+        Return the active platform name from es.ini in lower-case.
 
         :param env_name: Optional environment section to read; if None, uses `[default].env`.
         :return: The platform name (e.g., "snowflake").
