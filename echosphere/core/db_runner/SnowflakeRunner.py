@@ -54,7 +54,7 @@ class SnowflakeRunner:
             execution_time = round(end_time - start_time, 3)
             cur.query_result(qry_id)
             row_count = cur.rowcount
-            if not row_count:
+            if row_count is None:
                 raise Exception("No row count returned from Snowflake.")
 
         return row_count, execution_time, sql

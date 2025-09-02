@@ -9,6 +9,7 @@ from rich.console import Console
 from typing_extensions import Annotated
 
 from echosphere.commands import view
+from echosphere.core.junit_export import JUnitXmlExporter
 from echosphere.core.run_async_tests import run_async_test_and_poll
 from echosphere.core.setup_es import PlatformEnum, init_es
 from echosphere.core.suite_display import display_test_names_table
@@ -59,6 +60,16 @@ def run_suite(
             help="Environment name config.",
         ),
     ] = None,
+    junitxml: Annotated[
+        Optional[str],
+        typer.Option(
+            ...,
+            "--junitxml",
+            help="Path to write JUnit XML results (directories will be created if missing).",
+            rich_help_panel="Options",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """
     Run all tests.
@@ -83,13 +94,23 @@ def run_suite(
         for future in concurrent.futures.as_completed(futures):
             results.append(future.result())
 
+    # Export JUnit XML if requested
+    if junitxml:
+        try:
+            exporter = JUnitXmlExporter()
+            exporter.add_results(results)
+            abs_path = exporter.write_to_file(junitxml)
+            console.print(f"[bold green]JUnit XML results written to:[/bold green] {abs_path}")
+        except Exception as e:
+            console.print(f"[bold red]Failed to write JUnit XML:[/bold red] {e}")
+
     e_t = time.time()
     cum_t = round(e_t - s_t, 3)
     print("================================================================")
     if len(results) == 0:
         print("[bold]No Tests Executed.[/bold]")
         sys.exit(-1)
-    if all(results):
+    if all(r.passed for r in results):
         print(f"[bold green]Test Run Successful. [/green bold][yellow bold]{cum_t}s[/yellow bold]")
     else:
         print(f"[bold red]Test Run Failed. [/red bold][yellow bold]{cum_t}s[/yellow bold]")
