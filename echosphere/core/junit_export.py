@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import os
 import xml.etree.ElementTree as ET
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable, List
 
 from echosphere.core.test_result import TestResult
 
@@ -23,7 +23,7 @@ class JUnitXmlExporter:
         """
         self.suite_name = suite_name
         self.classname = classname
-        self._results: List[TestResult] = []
+        self._results: list[TestResult] = []
 
     def add_result(self, result: TestResult) -> None:
         """

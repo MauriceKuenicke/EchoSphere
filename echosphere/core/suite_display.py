@@ -7,7 +7,6 @@ of a specific test. It follows the docstring style demonstrated in
 """
 
 import sys
-from typing import Optional
 
 from rich import print
 from rich.console import Console
@@ -35,7 +34,7 @@ def display_no_tests_error() -> None:
     sys.exit(ERROR_EXIT_CODE)
 
 
-def display_test_names_table(subdir: Optional[str] = None) -> None:
+def display_test_names_table(subdir: str | None = None) -> None:
     """
     Render a table of discovered test names.
 
@@ -76,7 +75,7 @@ def display_test_sql_code(test_identifier: str) -> None:
                             optional subsuite prefix separated by `/`.
     :return: None
     """
-    subsuite: Optional[str] = None
+    subsuite: str | None = None
     test_name = test_identifier
     if "/" in test_identifier:
         subsuite, test_name = test_identifier.split("/")

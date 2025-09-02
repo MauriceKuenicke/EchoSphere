@@ -1,5 +1,3 @@
-from typing import Optional
-
 import typer
 
 from echosphere.core.suite_display import display_test_names_table, display_test_sql_code
@@ -10,7 +8,7 @@ app = typer.Typer()
 @app.command(name="tests", help="List test suite content. Use -a to view all tests or -d to filter by subdirectory.")
 def list_test_suite(
     all_tests: bool = typer.Option(False, "-a", "--all", help="Show all tests regardless of subsuite"),
-    subdir: Optional[str] = typer.Option(None, "-s", "--suite", help="Filter tests by subsuite"),
+    subdir: str | None = typer.Option(None, "-s", "--suite", help="Filter tests by subsuite"),
 ) -> None:
     """
     List the current test suite in a table format.

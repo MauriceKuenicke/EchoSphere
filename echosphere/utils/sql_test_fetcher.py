@@ -1,9 +1,16 @@
 import glob
 import os
-from typing import Optional
+from typing import TypedDict
 
 
-def get_sql_test_files(path: str = "./es_suite", subdir: Optional[str] = None) -> dict[str, dict[str, Optional[str]]]:
+class TestFileInfo(TypedDict):
+    """Typed information about a discovered SQL test file."""
+
+    full_path: str
+    subfolder: str | None
+
+
+def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> dict[str, TestFileInfo]:
     """
     Generates a dictionary of SQL test file identifiers and their corresponding file information
     from the specified directory and its immediate subfolders. The function searches for files
@@ -20,7 +27,7 @@ def get_sql_test_files(path: str = "./es_suite", subdir: Optional[str] = None) -
     """
     SQL_FILE_EXT = ".es.sql"
 
-    def process_file_path(f_p: str) -> tuple[str, Optional[str]]:
+    def process_file_path(f_p: str) -> tuple[str, str | None]:
         """Extract the file name and subfolder from a file path."""
         f_n = os.path.basename(f_p)[: -len(SQL_FILE_EXT)].lower()
         relative_path = os.path.relpath(f_p, path)
@@ -28,7 +35,7 @@ def get_sql_test_files(path: str = "./es_suite", subdir: Optional[str] = None) -
         return f_n, subfolder
 
     # Create the result dictionary
-    file_info: dict[str, dict[str, Optional[str]]] = {}
+    file_info: dict[str, TestFileInfo] = {}
 
     # Process all files with the SQL extension (both in the main dir and subfolders)
     all_patterns = [

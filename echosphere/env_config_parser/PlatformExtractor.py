@@ -1,12 +1,11 @@
 from configparser import ConfigParser
-from typing import Optional
 
 
 class PlatformExtractor:
     """Utilities to read platform information from es.ini."""
 
     @classmethod
-    def extract_platform_info(cls, env_name: Optional[str] = None) -> str:
+    def extract_platform_info(cls, env_name: str | None = None) -> str:
         """
         Return the active platform name from es.ini in lower-case.
 

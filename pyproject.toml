@@ -17,7 +17,8 @@ classifiers = [
 ]
 dependencies = [
     "typer",
-    "snowflake-connector-python"
+    "snowflake-connector-python",
+    "openpyxl"
 ]
 
 [project.optional-dependencies]
@@ -30,7 +31,8 @@ dev = [
     "pytest-cov",
     "ruff",
     "typer",
-    "snowflake-connector-python"
+    "snowflake-connector-python",
+    "openpyxl"
 ]
 
 [project.scripts]
@@ -42,7 +44,7 @@ line-length = 120
 [tool.ruff.lint]
 select = ["D", "I", "PL", "RUF", "F", "W"]
 ignore = ["D200", "D212", "D203", "D104", "D100", "D103", "PLR2004", "D205", "D415", "D400", "D401",
-    "W191", "PLR0913", "PLR0915", "RUF100", "D206"]
+    "W191", "PLR0913", "PLR0915", "RUF100", "D206", "PLR0912"]
 fixable = ["I001", "W292"]
 
 [tool.ruff.lint.per-file-ignores]

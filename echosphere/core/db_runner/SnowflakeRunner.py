@@ -1,4 +1,5 @@
 import time
+from typing import Any
 
 import snowflake.connector
 from snowflake.connector import ProgrammingError
@@ -58,3 +59,32 @@ class SnowflakeRunner:
                 raise Exception("No row count returned from Snowflake.")
 
         return row_count, execution_time, sql
+
+    @classmethod
+    def fetch_failure_sample(cls, env: str | None, sql: str, limit: int = 1000) -> tuple[list[str], list[tuple[Any]]]:
+        """
+        Fetch up to `limit` rows and column names for a failed test's SQL query.
+
+        The SQL is wrapped with a LIMIT to avoid loading too much data.
+        """
+        sf_agent = SnowflakeAgentConfig(agent_name=env)
+        sql_clean = sql.strip().rstrip(";")
+        wrapped_sql = f"SELECT * FROM ({sql_clean}) AS t LIMIT {int(limit)}"
+        with snowflake.connector.connect(
+            user=sf_agent.user,
+            password=sf_agent.password,
+            account=sf_agent.account,
+            warehouse=sf_agent.warehouse,
+            role=sf_agent.role,
+            database=sf_agent.database,
+            schema=sf_agent.schema,
+            session_parameters={
+                "QUERY_TAG": "EchoSphere Failure Sample Fetch",
+            },
+            application="EchoSphere",
+        ) as conn:
+            cur = conn.cursor()
+            cur.execute(wrapped_sql)
+            rows = cur.fetchmany(size=limit)
+            cols = [d[0] for d in cur.description] if cur.description else []
+        return list(cols), list(rows)  # type: ignore

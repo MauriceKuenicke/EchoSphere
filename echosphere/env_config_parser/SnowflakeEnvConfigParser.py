@@ -1,5 +1,4 @@
 from configparser import ConfigParser
-from typing import Optional
 
 
 class SnowflakeAgentConfig:
@@ -24,7 +23,7 @@ class SnowflakeAgentConfig:
                        the default agent is read from `[default].agent`.
     """
 
-    def __init__(self, agent_name: Optional[str] = None) -> None:
+    def __init__(self, agent_name: str | None = None) -> None:
         """
         Initialize the configuration by reading values from `es.ini`.
 

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Sequence
 
 from rich import print
 
@@ -10,7 +11,9 @@ FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{e
 SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
 
 
-def run_async_test_and_poll(test_name: str, test_file_path: str, env: str | None) -> TestResult:
+def run_async_test_and_poll(
+    test_name: str, test_file_path: str, env: str | None, capture_failure_data: bool = False
+) -> TestResult:
     """
     Run a single SQL test asynchronously on the configured platform and evaluate its result.
 
@@ -19,6 +22,7 @@ def run_async_test_and_poll(test_name: str, test_file_path: str, env: str | None
     :param test_name: Human-friendly identifier of the test (used for output).
     :param test_file_path: Full path to the SQL file to execute.
     :param env: Optional environment/agent name from es.ini; if None, default is used.
+    :param capture_failure_data: If True, fetch up to 1000 rows and columns when test fails.
     :return: TestResult with pass/fail and details.
     """
     platform_name = PlatformExtractor.extract_platform_info(env_name=env)
@@ -38,6 +42,22 @@ def run_async_test_and_poll(test_name: str, test_file_path: str, env: str | None
             test_name=test_name, execution_time=execution_time, sql=sql, row_count=row_count
         )
         print(error_msg)
+
+        failure_columns: list[str] | None = None
+        failure_rows: list[Sequence[object]] | None = None
+        if capture_failure_data:
+            try:
+                if platform_name == "snowflake":
+                    cols, rows = SnowflakeRunner.fetch_failure_sample(env=env, sql=sql, limit=1000)
+                else:
+                    raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake]")
+                failure_columns = cols
+                # Ensure rows are a list of sequences
+                failure_rows = list(rows[:1000]) if rows else []
+            except Exception:
+                # Keep exporting flow robust; just record message
+                pass
+
         return TestResult(
             name=test_name,
             passed=False,
@@ -46,6 +66,8 @@ def run_async_test_and_poll(test_name: str, test_file_path: str, env: str | None
             row_count=int(row_count or 0),
             timestamp=timestamp,
             failure_message=f"Test returned {row_count} rows. Expected 0 rows.",
+            failure_columns=failure_columns,
+            failure_rows=failure_rows,
         )
 
     success_message = SUCCESS_TEST_MESSAGE.format(test_name=test_name, execution_time=execution_time)
