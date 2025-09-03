@@ -1,75 +1,102 @@
-<p align="center">
-  <a href="https://mauricekuenicke.github.io/echosphere/"><img src="docs/assets/logo-color-cropped.svg" alt="EchoSphere Logo" width="60%"></a>
-</p>
+<div align="center">
+  <a href="https://mauricekuenicke.github.io/EchoSphere/"><img src="docs/assets/logo-color-cropped.svg" alt="EchoSphere logo" width="60%"></a>
 
-<p align="center">
-    <em>Snowflake Database Testing and Data Quality Assesements</em>
-</p>
+  <h3>Modern SQL Testing for Snowflake</h3>
+
+  <a href="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml">
+    <img alt="Docs Deploy Status" src="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml/badge.svg">
+  </a>
+  <a href="https://github.com/MauriceKuenicke/EchoSphere/releases">
+    <img alt="Version" src="https://img.shields.io/badge/version-v0.0.0-blue"></a>
+  <a href="https://www.python.org/downloads/release/python-3100/">
+    <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue"></a>
+
+  <p>
+    <a href="https://mauricekuenicke.github.io/EchoSphere/">Documentation</a>
+    ·
+    <a href="https://mauricekuenicke.github.io/EchoSphere/getting-started/">Get Started</a>
+    ·
+    <a href="https://mauricekuenicke.github.io/EchoSphere/examples/cookbook/">Examples</a>
+    ·
+    <a href="https://github.com/MauriceKuenicke/EchoSphere/issues">Issues</a>
+  </p>
+</div>
 
 ---
 
-**Source Code**: <a href="https://github.com/MauriceKuenicke/EchoSphere" target="_blank">https://github.com/MauriceKuenicke/EchoSphere</a>
+## ✨ Overview
+EchoSphere helps you write and run maintainable, SQL-first tests against your Snowflake data warehouse. Catch data issues early, build confidence in your pipelines, and run checks at scale without leaving SQL.
 
----
-<p align="center">
-<em>Derived from the mythological nymph Echo — cursed to only repeat the words of others — this
-name symbolizes the power of reflection and reverberation. In Greek mythology, Echo's 
-voice lingered in caves and valleys, mirroring sounds across vast expanses.</em></p>
+> Snowflake focus today. Engine-agnostic design enables future database support.
 
-Run parallelized SQL-based tests on Snowflake Databases. Lightweight, scalable, and customizable for different environments.
+## 🚀 Key Features
+- Fast, parallel test execution across environments ("Agents")
+- Lightweight test authoring using plain SQL files (.es.sql)
+- Zero-rows-as-success contract for simple, powerful assertions
+- CI/CD friendly output and exports (e.g., JUnit/XML, Excel)
+- Clear environment isolation and switching per run
+- Built for teams: structure, conventions, and reporting
 
----
-# ⚠️ Important
-This project is currently not safe for use in a production environment. Use at your own risk.
+## 📦 Quick Start
 
-
-
-# Usage
-
-<p align="center">
-  <img src="docs/assets/example.PNG" alt="Example Output" width="60%">
-</p>
-
-
-## Installation
+### Installation
 ```sh
 pip install git+https://github.com/MauriceKuenicke/EchoSphere
 ```
 
-## Setup
-Inside your virtual environment run:
-```
+### First-time setup
+```sh
 es setup
 ```
-This will set up a default location to store your SQL tests in as well as a configuration file for your Snowflake
-credentials and environments.
+This creates a default location for your SQL tests and a configuration file with Snowflake credentials and environments.
 
-EchoSphere test suites are just a collection of SQL files (i.e. `MY_TEST.es.sql`). 
-The file ending `.es.sql` is important for EchoSphere to detect the test files. 
-Each test needs to be written in a way that a successful execution will generate zero output rows.
-As soon as a single row is returned, EchoSphere labels the test as failed.
-SQL statements should not use full-path definitions for tables to allow for more flexibility when setting up
-agents.
-
-Example:
+### Write your first test
+Create a file like tests/my_first_test.es.sql:
 ```sql
-SELECT * FROM
-    (SELECT
-         SUM(O_TOTALPRICE) AS "SUM_TOTALPRICE"
-     FROM ORDERS
-     WHERE O_ORDERDATE = '1995-02-19')
+-- Expect 0 rows when the rule holds
+SELECT *
+FROM (
+  SELECT SUM(O_TOTALPRICE) AS "SUM_TOTALPRICE"
+  FROM ORDERS
+  WHERE O_ORDERDATE = '1995-02-19'
+)
 WHERE "SUM_TOTALPRICE" <> 944870465.07;
 ```
-This query will check that the sum of the total order prices for a past date matches an expected value.
-If the values do not match, 
-this query will return a single row containing the actual number calculated at runtime during the test.
+If the values don't match, the query returns a row and the test fails; if it returns zero rows, the test passes.
 
-## Environment Management
-Different Snowflake environments (Agents) are managed in the `es.ini` file.
+### Run tests
+```sh
+# Run with default agent
+es run
 
+# Run against a specific agent
+es run -a agent.snowflake.dev
 ```
+
+<p align="center">
+  <img src="docs/assets/example.PNG" alt="EchoSphere example terminal output" width="70%">
+</p>
+
+## 📚 Documentation
+- Getting Started: https://mauricekuenicke.github.io/EchoSphere/getting-started/
+- User Guide: https://mauricekuenicke.github.io/EchoSphere/user-guide/
+- Command Reference: https://mauricekuenicke.github.io/EchoSphere/command-reference/
+- Reference (Configuration, SQL syntax, API): https://mauricekuenicke.github.io/EchoSphere/reference/
+- Examples & Tutorials: https://mauricekuenicke.github.io/EchoSphere/examples/cookbook/
+- Contributing: https://mauricekuenicke.github.io/EchoSphere/contributing/
+
+## 🤝 Community & Support
+- Issues & Feature Requests: https://github.com/MauriceKuenicke/EchoSphere/issues
+- Source Code: https://github.com/MauriceKuenicke/EchoSphere
+
+## ⚠️ Important
+This project is early-stage and not recommended for production use yet. Proceed at your own risk.
+
+## 🧭 Environment Management (Agents)
+Manage multiple Snowflake environments in es.ini:
+```ini
 [default]
-agent = agent.snowflake.dev  # Name of the agent that will be used if no command line argument is provided
+agent = agent.snowflake.dev
 
 [agent.snowflake.dev]
 user = ...
@@ -79,23 +106,23 @@ warehouse = ...
 role = ...
 database = ...
 schema = ...
-
-[agent.snowflake.prod]
-user = ...
-password = ...
-account = ...
-warehouse = ...
-role = ...
-database = ...
-schema = ...
 ```
-
-When running tests, you can change the agent to be used by providing its name as an argument, like
+Switch agents at runtime:
 ```sh
 es run -a agent.snowflake.dev
 ```
 
-# Development
-``
+<details>
+  <summary>About the name</summary>
+  <em>Derived from the mythological nymph Echo — cursed to repeat the words of others — the name symbolizes reflection and reverberation. Echo's voice lingered in caves and valleys, mirroring sounds across vast expanses.</em>
+</details>
+
+## 📄 License
+No explicit license file is present in this repository at the moment. Please refer to the repository owner for licensing details.
+
+---
+
+### Development
+```sh
 pip install -e .[dev]
-``
+```
