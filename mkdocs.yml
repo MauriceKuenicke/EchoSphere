@@ -1,5 +1,7 @@
 site_name: EchoSphere
-site_url: https://mydomain.org/
+site_url: https://mauricekuenicke.github.io/EchoSphere/
+site_author: Maurice Künicke
+edit_uri: edit/main/docs/
 repo_url: https://github.com/MauriceKuenicke/EchoSphere
 repo_name: MauriceKuenicke/EchoSphere
 theme:
