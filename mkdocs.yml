@@ -1,5 +1,5 @@
 site_name: EchoSphere
-site_url: https://mydomain.org/mysite
+site_url: https://mydomain.org/
 repo_url: https://github.com/MauriceKuenicke/EchoSphere
 repo_name: MauriceKuenicke/EchoSphere
 theme:
@@ -34,9 +34,33 @@ theme:
   features:
     - search.suggest
     - search.share
+    - search.highlight
+    - content.code.copy
 
 plugins:
   - search
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started/index.md
+  - User Guide:
+      - Overview: user-guide/index.md
+      - Writing Tests: writing-tests/index.md
+      - Command Reference: command-reference/index.md
+  - Reference:
+      - Configuration: reference/configuration.md
+      - Environment Variables: reference/environment-variables.md
+      - SQL Testing Syntax: reference/sql-testing-syntax.md
+      - API Usage: reference/api-usage.md
+  - Advanced Topics:
+      - CI/CD Integration: advanced/ci-cd.md
+      - Performance: advanced/performance.md
+      - Large-Scale Management: advanced/large-scale.md
+  - Examples & Tutorials:
+      - Cookbook: examples/cookbook.md
+  - Troubleshooting: troubleshooting/index.md
+  - Contributing: contributing.md
 
 copyright: Copyright &copy; 2025 - Maurice Künicke
 
