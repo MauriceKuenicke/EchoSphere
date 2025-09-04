@@ -17,7 +17,7 @@ class PlatformEnum(str, Enum):
 
     SNOWFLAKE = "snowflake"
     # DATABRICKS = "databricks"
-    # POSTGRES = "postgres"
+    POSTGRES = "postgres"
     # SQLITE = "sqlite"
 
 
@@ -35,6 +35,12 @@ def get_resource_path(dir_name: str, resource_name: str) -> Path:
 
 SETUP_INI_FILE_MAPPING = {
     PlatformEnum.SNOWFLAKE.value: get_resource_path(SETUP_FILES_DIR, "snowflake.ini"),
+    PlatformEnum.POSTGRES.value: get_resource_path(SETUP_FILES_DIR, "postgres.ini"),
+}
+
+EXAMPLE_SQL_FOLDER_MAPPING = {
+    PlatformEnum.SNOWFLAKE.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.snowflake"),
+    PlatformEnum.POSTGRES.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.postgres"),
 }
 
 
@@ -53,12 +59,13 @@ def create_file_if_not_exists(file_path: Union[str, Path], content: str) -> bool
     return False
 
 
-def setup_es_directory(dir_name: str) -> None:
+def setup_es_directory(dir_name: str, platform: Union[str, PlatformEnum]) -> None:
     """
     Create the default `es_suite` directory and an example SQL test file.
 
     If the directory already exists, creation is skipped and a message is printed.
 
+    :param platform: platform
     :param dir_name: Name of the directory to create for the test suite.
     :return: None
     """
@@ -68,7 +75,9 @@ def setup_es_directory(dir_name: str) -> None:
         return
     es_suite_path.mkdir()
 
-    example_query_dir_path = importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}")
+    platform_key = platform.value if isinstance(platform, PlatformEnum) else platform
+    example_query_dir_path = EXAMPLE_SQL_FOLDER_MAPPING[platform_key]
+
     for sql_file in example_query_dir_path.iterdir():
         if ".sql" in sql_file.name:
             example_query_content = sql_file.read_text()
@@ -107,5 +116,5 @@ def init_es(platform: Union[str, PlatformEnum], dir_name: str = ES_SUITE_TO_BE_C
     :param dir_name: Name of the directory to initialize for the suite.
     :return: None
     """
-    setup_es_directory(dir_name)
+    setup_es_directory(dir_name, platform)
     setup_config_file(platform)

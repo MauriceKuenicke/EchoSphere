@@ -17,7 +17,6 @@ classifiers = [
 ]
 dependencies = [
     "typer",
-    "snowflake-connector-python",
     "openpyxl"
 ]
 
@@ -32,7 +31,16 @@ dev = [
     "ruff",
     "typer",
     "snowflake-connector-python",
-    "openpyxl"
+    "openpyxl",
+    "sqlalchemy",
+    "psycopg2-binary"
+]
+snowflake = [
+    "snowflake-connector-python"
+]
+postgres = [
+    "sqlalchemy",
+    "psycopg2-binary"
 ]
 
 [project.scripts]

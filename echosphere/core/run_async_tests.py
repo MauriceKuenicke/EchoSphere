@@ -1,14 +1,34 @@
 from datetime import datetime
-from typing import Sequence
+from typing import Sequence, Type
 
 from rich import print
 
-from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner
+from echosphere.core.db_runner.BaseClass import BaseRunner
 from echosphere.core.test_result import TestResult
 from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 
 FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"
 SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
+
+
+def get_db_runner(platform: str) -> Type[BaseRunner]:
+    if platform == "snowflake":
+        try:
+            from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner as Runner
+        except ImportError:
+            raise ImportError(
+                "This feature requires the snowflake extra. Install with 'pip install EchoSphere[snowflake]'"
+            )
+    elif platform == "postgres":
+        try:
+            from echosphere.core.db_runner.PostgresRunner import PostgresRunner as Runner  # type: ignore[assignment]
+        except ImportError:
+            raise ImportError(
+                "This feature requires the postgres extra. Install with 'pip install EchoSphere[postgres]'"
+            )
+    else:
+        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake, postgres]")
+    return Runner
 
 
 def run_async_test_and_poll(
@@ -26,13 +46,11 @@ def run_async_test_and_poll(
     :return: TestResult with pass/fail and details.
     """
     platform_name = PlatformExtractor.extract_platform_info(env_name=env)
-    if platform_name not in ("snowflake",):
-        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake]")
+    if platform_name not in ("snowflake", "postgres"):
+        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake, postgres]")
 
-    if platform_name == "snowflake":
-        row_count, execution_time, sql = SnowflakeRunner.dispatch_test(env=env, test_file_path=test_file_path)
-    else:
-        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake]")
+    runner = get_db_runner(platform_name)
+    row_count, execution_time, sql = runner.dispatch_test(env=env, test_file_path=test_file_path)
 
     timestamp = datetime.now()
     failed = bool(row_count)
@@ -47,10 +65,7 @@ def run_async_test_and_poll(
         failure_rows: list[Sequence[object]] | None = None
         if capture_failure_data:
             try:
-                if platform_name == "snowflake":
-                    cols, rows = SnowflakeRunner.fetch_failure_sample(env=env, sql=sql, limit=1000)
-                else:
-                    raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake]")
+                cols, rows = runner.fetch_failure_sample(env=env, sql=sql, limit=1000)
                 failure_columns = cols
                 # Ensure rows are a list of sequences
                 failure_rows = list(rows[:1000]) if rows else []

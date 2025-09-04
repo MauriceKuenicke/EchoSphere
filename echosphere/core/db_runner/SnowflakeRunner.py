@@ -4,10 +4,11 @@ from typing import Any
 import snowflake.connector
 from snowflake.connector import ProgrammingError
 
+from echosphere.core.db_runner.BaseClass import BaseRunner
 from echosphere.env_config_parser.SnowflakeEnvConfigParser import SnowflakeAgentConfig
 
 
-class SnowflakeRunner:
+class SnowflakeRunner(BaseRunner):
     """
     A utility class for executing SQL tests against a Snowflake database.
     """
