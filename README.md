@@ -1,7 +1,7 @@
 <div align="center">
   <a href="https://mauricekuenicke.github.io/EchoSphere/"><img src="docs/assets/logo-color-cropped.svg" alt="EchoSphere logo" width="60%"></a>
 
-  <h3>Modern SQL Testing for Snowflake</h3>
+  <h3>Modern SQL Testing</h3>
 
   <a href="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml">
     <img alt="Docs Deploy Status" src="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml/badge.svg">
@@ -30,7 +30,7 @@ EchoSphere helps you write and run maintainable, SQL-first tests against your Sn
 > Snowflake focus today. Engine-agnostic design enables future database support.
 
 ## 🚀 Key Features
-- Fast, parallel test execution across environments ("Agents")
+- Fast, parallel test execution across environments
 - Lightweight test authoring using plain SQL files (.es.sql)
 - Zero-rows-as-success contract for simple, powerful assertions
 - CI/CD friendly output and exports (e.g., JUnit/XML, Excel)
@@ -41,7 +41,7 @@ EchoSphere helps you write and run maintainable, SQL-first tests against your Sn
 
 ### Installation
 ```sh
-pip install git+https://github.com/MauriceKuenicke/EchoSphere
+pip install git+https://github.com/MauriceKuenicke/EchoSphere[snowflake,postgres]
 ```
 
 ### First-time setup
@@ -66,11 +66,16 @@ If the values don't match, the query returns a row and the test fails; if it ret
 
 ### Run tests
 ```sh
-# Run with default agent
+# Run with default env
 es run
 
-# Run against a specific agent
-es run -a agent.snowflake.dev
+# Run against a specific env
+es run -e env.snowflake.dev
+```
+
+# Run with exports
+```
+es run --junitxml=test_result.xml --export-failures=failures.xlsx
 ```
 
 <p align="center">
@@ -92,13 +97,13 @@ es run -a agent.snowflake.dev
 ## ⚠️ Important
 This project is early-stage and not recommended for production use yet. Proceed at your own risk.
 
-## 🧭 Environment Management (Agents)
+## 🧭 Environment Management
 Manage multiple Snowflake environments in es.ini:
 ```ini
 [default]
-agent = agent.snowflake.dev
+env = env.snowflake.dev
 
-[agent.snowflake.dev]
+[env.snowflake.dev]
 user = ...
 password = ...
 account = ...
@@ -107,9 +112,9 @@ role = ...
 database = ...
 schema = ...
 ```
-Switch agents at runtime:
+Switch env at runtime:
 ```sh
-es run -a agent.snowflake.dev
+es run -e env.snowflake.dev
 ```
 
 <details>

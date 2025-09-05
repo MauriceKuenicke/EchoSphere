@@ -36,9 +36,11 @@ dev = [
     "psycopg2-binary"
 ]
 snowflake = [
+    "openpyxl",
     "snowflake-connector-python"
 ]
 postgres = [
+    "openpyxl",
     "sqlalchemy",
     "psycopg2-binary"
 ]
