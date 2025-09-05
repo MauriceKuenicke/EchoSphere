@@ -17,7 +17,7 @@ if __name__ == "__main__":
 ## Recommended Approach
 - Prefer invoking `es` via subprocess in automation scripts.
 - Use `--junitxml` to generate machine-readable results for CI systems.
-- Use `--export-failures` to capture failing rows for post-processing.
+- Use `--export-failures` to capture failing rows for post-processing (captures up to 1000 rows per failed test, including column headers).
 
 Example (Python):
 ```python

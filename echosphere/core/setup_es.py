@@ -1,47 +1,12 @@
-import importlib.resources
 import os
-from enum import Enum
 from pathlib import Path
 from typing import Union
-
+from echosphere.core.platforms import PlatformEnum, SETUP_INI_FILE_MAPPING, EXAMPLE_SQL_FOLDER_MAPPING
 import typer
 
-SETUP_FILES_DIR = "ini_setup_files"
-EXAMPLE_QUERY_DIR = "example_query_setup_files"
+
 INIT_FILE_TO_BE_CREATED_NAME = "es.ini"
 ES_SUITE_TO_BE_CREATED_DEFAULT_DIR = "es_suite"
-
-
-class PlatformEnum(str, Enum):
-    """Supported platforms for EchoSphere configuration."""
-
-    SNOWFLAKE = "snowflake"
-    # DATABRICKS = "databricks"
-    POSTGRES = "postgres"
-    # SQLITE = "sqlite"
-
-
-def get_resource_path(dir_name: str, resource_name: str) -> Path:
-    """
-    Return a Path to a packaged resource.
-
-    :param dir_name: Name of the resource directory within `echosphere.core`.
-    :param resource_name: File name of the resource to resolve.
-    :return: Filesystem path to the requested resource.
-    """
-    with importlib.resources.path(f"echosphere.core.{dir_name}", resource_name) as path:
-        return path
-
-
-SETUP_INI_FILE_MAPPING = {
-    PlatformEnum.SNOWFLAKE.value: get_resource_path(SETUP_FILES_DIR, "snowflake.ini"),
-    PlatformEnum.POSTGRES.value: get_resource_path(SETUP_FILES_DIR, "postgres.ini"),
-}
-
-EXAMPLE_SQL_FOLDER_MAPPING = {
-    PlatformEnum.SNOWFLAKE.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.snowflake"),
-    PlatformEnum.POSTGRES.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.postgres"),
-}
 
 
 def create_file_if_not_exists(file_path: Union[str, Path], content: str) -> bool:

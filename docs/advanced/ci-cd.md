@@ -97,6 +97,7 @@ pipeline {
 ```
 
 ## Tips
+- Examples above use Snowflake for brevity; Postgres is supported as well. Adapt `es.ini` stanzas accordingly and install the appropriate extra (`EchoSphere[postgres]`).
 - Use `--export-failures` to attach detailed artifacts for debugging
 - Fail the build when EchoSphere exits non‑zero, or allow failures but surface reports depending on your gate policy
 - Keep secrets out of the repo; use CI secret stores

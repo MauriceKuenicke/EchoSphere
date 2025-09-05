@@ -14,11 +14,11 @@ Initialize EchoSphere for your platform and scaffold a suite and configuration.
 
 Usage:
 ```sh
-es setup --platform SNOWFLAKE
+es setup --platform SNOWFLAKE  # or POSTGRES
 ```
 
 - --platform PLATFORM
-  - Required. Select the target platform to configure. Supported: `SNOWFLAKE`.
+  - Required. Select the target platform to configure. Supported: `SNOWFLAKE`, `POSTGRES`.
 
 What it does:
 - Creates a default tests directory
@@ -47,9 +47,11 @@ Options:
   - Write JUnit XML results to PATH (directories will be created if missing).
 - --export-failures PATH
   - Write an Excel (.xlsx) with failing test result rows to PATH (directories will be created if missing).
+  - Captures up to 1000 rows per failed test (including column headers). May increase query time and warehouse/DB cost.
 
 Behavior:
 - Discovers tests with the `.es.sql` suffix
+- A test passes if the executed SQL returns zero rows
 - Runs tests concurrently and prints a summary
 - Non‑zero exit on any failure
 

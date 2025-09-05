@@ -6,8 +6,8 @@ Having issues? This guide helps you diagnose and fix common problems.
 - Symptom: authentication or network errors.
 - Checks:
   - Verify `es.ini` credentials for the selected environment.
-  - Ensure your Snowflake account, role, warehouse, database, and schema are correct.
-  - Confirm network access to Snowflake from your environment/CI.
+  - For Snowflake: ensure account, role, warehouse, database, and schema are correct; confirm network access to Snowflake from your environment/CI.
+  - For Postgres: ensure host, port, database, schema, user, and password are correct; confirm network/firewall access to the Postgres server and set an appropriate `sslmode` (if required).
 
 ## No Tests Discovered
 - Symptom: EchoSphere reports zero tests executed.

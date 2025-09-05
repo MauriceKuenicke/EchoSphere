@@ -5,7 +5,7 @@ EchoSphere reads environment configuration from an `es.ini` file. This file defi
 ## File Structure
 ```ini
 [default]
-env = env.snowflake.dev  # Name of the default environment
+env = env.snowflake.dev  # Name of the default environment (could also be env.postgres.dev)
 
 [env.snowflake.dev]
 platform = snowflake
@@ -26,14 +26,25 @@ warehouse = ...
 role = ...
 database = ...
 schema = ...
+
+[env.postgres.dev]
+platform = postgres
+host = ...
+port = 5432
+database = ...
+schema = public
+user = ...
+password = ...
+sslmode = ...  # optional
 ```
 
 ## Sections
 - [default]
   - `env`: the environment name to use when no `--environment` is provided.
 - [env.<platform>.<name>]
-  - `platform`: currently `snowflake`.
-  - `user`, `password`, `account`, `warehouse`, `role`, `database`, `schema`: connection settings for your Snowflake agent.
+  - `platform`: `snowflake` or `postgres`.
+  - For Snowflake: `user`, `password`, `account`, `warehouse`, `role`, `database`, `schema`.
+  - For Postgres: `host`, `port`, `database`, `schema`, `user`, `password`, `sslmode` (optional).
 
 ## Selecting the Environment
 - CLI option: `es run --environment dev`

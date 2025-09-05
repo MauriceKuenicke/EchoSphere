@@ -1,34 +1,15 @@
 from datetime import datetime
-from typing import Sequence, Type
+from typing import Sequence
 
 from rich import print
 
-from echosphere.core.db_runner.BaseClass import BaseRunner
+from echosphere.core.db_runner import get_db_runner
 from echosphere.core.test_result import TestResult
+from echosphere.core.platforms import PlatformEnum
 from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 
 FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"
 SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
-
-
-def get_db_runner(platform: str) -> Type[BaseRunner]:
-    if platform == "snowflake":
-        try:
-            from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner as Runner
-        except ImportError:
-            raise ImportError(
-                "This feature requires the snowflake extra. Install with 'pip install EchoSphere[snowflake]'"
-            )
-    elif platform == "postgres":
-        try:
-            from echosphere.core.db_runner.PostgresRunner import PostgresRunner as Runner  # type: ignore[assignment]
-        except ImportError:
-            raise ImportError(
-                "This feature requires the postgres extra. Install with 'pip install EchoSphere[postgres]'"
-            )
-    else:
-        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake, postgres]")
-    return Runner
 
 
 def run_async_test_and_poll(
@@ -42,12 +23,12 @@ def run_async_test_and_poll(
     :param test_name: Human-friendly identifier of the test (used for output).
     :param test_file_path: Full path to the SQL file to execute.
     :param env: Optional environment/agent name from es.ini; if None, default is used.
-    :param capture_failure_data: If True, fetch up to 1000 rows and columns when test fails.
+    :param capture_failure_data: If True, fetch up to 1000 rows and columns when the test fails.
     :return: TestResult with pass/fail and details.
     """
     platform_name = PlatformExtractor.extract_platform_info(env_name=env)
-    if platform_name not in ("snowflake", "postgres"):
-        raise Exception("Unsupported platform name found in .ini file. Should be one of: [snowflake, postgres]")
+    if platform_name not in PlatformEnum:
+        raise Exception(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
 
     runner = get_db_runner(platform_name)
     row_count, execution_time, sql = runner.dispatch_test(env=env, test_file_path=test_file_path)

@@ -23,7 +23,7 @@ es view test integrity/no_duplicate_orders
 ## Create a New Project
 ```sh
 pip install git+https://github.com/MauriceKuenicke/EchoSphere
-es setup --platform SNOWFLAKE
+es setup --platform SNOWFLAKE  # or POSTGRES
 ```
 
 ## Example Assertion Templates
