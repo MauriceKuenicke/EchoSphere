@@ -41,7 +41,7 @@ EchoSphere helps you write and run maintainable, SQL-first tests against your Sn
 
 ### Installation
 ```sh
-pip install git+https://github.com/MauriceKuenicke/EchoSphere[snowflake,postgres]
+pip install "EchoSphere[snowflake,postgres] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
 ```
 
 ### First-time setup
