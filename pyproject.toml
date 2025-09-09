@@ -31,18 +31,20 @@ dev = [
     "ruff",
     "typer",
     "snowflake-connector-python",
-    "openpyxl",
     "sqlalchemy",
-    "psycopg2-binary"
+    "psycopg2-binary",
+    "databricks-sql-connector[pyarrow] "
 ]
 snowflake = [
-    "openpyxl",
     "snowflake-connector-python"
 ]
 postgres = [
-    "openpyxl",
     "sqlalchemy",
     "psycopg2-binary"
+]
+
+databricks = [
+    "databricks-sql-connector[pyarrow] "
 ]
 
 [project.scripts]

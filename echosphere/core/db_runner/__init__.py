@@ -17,6 +17,13 @@ def get_db_runner(platform: str) -> Type[BaseRunner]:
             raise ImportError(
                 "This feature requires the postgres extra. Install with 'pip install EchoSphere[postgres]'"
             )
+    elif platform == "databricks":
+        try:
+            from echosphere.core.db_runner.DatabricksRunner import DatabricksRunner as Runner  # type: ignore[assignment]
+        except ImportError:
+            raise ImportError(
+                "This feature requires the databricks extra. Install with 'pip install EchoSphere[databricks]'"
+            )
     else:
         raise Exception(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
     return Runner

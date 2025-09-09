@@ -7,7 +7,7 @@ class PlatformEnum(str, Enum):
     """Supported platforms for EchoSphere configuration."""
 
     SNOWFLAKE = "snowflake"
-    # DATABRICKS = "databricks"
+    DATABRICKS = "databricks"
     POSTGRES = "postgres"
 
 
@@ -29,9 +29,11 @@ def get_resource_path(dir_name: str, resource_name: str) -> Path:
 SETUP_INI_FILE_MAPPING = {
     PlatformEnum.SNOWFLAKE.value: get_resource_path(SETUP_FILES_DIR, "snowflake.ini"),
     PlatformEnum.POSTGRES.value: get_resource_path(SETUP_FILES_DIR, "postgres.ini"),
+    PlatformEnum.DATABRICKS.value: get_resource_path(SETUP_FILES_DIR, "databricks.ini"),
 }
 
 EXAMPLE_SQL_FOLDER_MAPPING = {
     PlatformEnum.SNOWFLAKE.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.snowflake"),
     PlatformEnum.POSTGRES.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.postgres"),
+    PlatformEnum.DATABRICKS.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.databricks"),
 }

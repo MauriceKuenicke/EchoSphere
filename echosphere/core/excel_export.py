@@ -5,6 +5,7 @@ import re
 from collections.abc import Iterable
 from typing import Any
 
+from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.worksheet.worksheet import Worksheet
@@ -103,7 +104,7 @@ class FailedTestExporter:
                 raise Exception(f"Failed to create directories for path '{abs_path}': {e}")
 
         wb = Workbook()
-        # Remove the default sheet created by openpyxl if present and we have failures
+        # Remove the default sheet created by openpyxl if present, and we have failures
         if self._results:
             default_ws = wb.active
             wb.remove(default_ws)
@@ -149,6 +150,8 @@ class FailedTestExporter:
             for dr in rows:
                 row_idx += 1
                 for col_idx, cell_val in enumerate(dr, start=1):
+                    if isinstance(cell_val, datetime):
+                        cell_val = cell_val.replace(tzinfo=None)
                     ws.cell(row=row_idx, column=col_idx, value=cell_val)
 
             # Freeze pane below header
@@ -164,6 +167,7 @@ class FailedTestExporter:
             ws.cell(row=1, column=1, value="No failed tests to export.")
 
         try:
+            print("BEFORE")
             wb.save(abs_path)
         except OSError as e:
             raise Exception(f"Failed to write Excel file to '{abs_path}': {e}")
