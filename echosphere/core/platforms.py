@@ -14,6 +14,7 @@ class PlatformEnum(str, Enum):
 SETUP_FILES_DIR = "ini_setup_files"
 EXAMPLE_QUERY_DIR = "example_query_setup_files"
 
+
 def get_resource_path(dir_name: str, resource_name: str) -> Path:
     """
     Return a Path to a packaged resource.

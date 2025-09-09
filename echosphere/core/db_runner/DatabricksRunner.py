@@ -1,6 +1,8 @@
-import time
 import logging
+import time
 from typing import Any
+
+from databricks.sql import Connection
 
 from echosphere.core.db_runner.BaseClass import BaseRunner
 from echosphere.env_config_parser.DatabricksEnvConfigParser import DatabricksAgentConfig
@@ -9,21 +11,13 @@ logger = logging.getLogger(__name__)
 
 
 class DatabricksRunner(BaseRunner):
-    """
-    Execute SQL tests against Databricks using databricks-sql-connector.
-
-    The test SQL is expected to return violating rows; we wrap it in COUNT(*) to
-    get a reliable count without materializing all rows client-side.
-    """
+    """Execute SQL tests against Databricks using databricks-sql-connector."""
 
     @classmethod
-    def _connect(cls, cfg: DatabricksAgentConfig):
-        """Return a context-managed Databricks SQL connection.
-
-        Import is within the method to avoid hard dependency at import time.
-        """
+    def _connect(cls, cfg: DatabricksAgentConfig) -> Connection:
+        """Return a Databricks SQL connection (import deferred to avoid hard dependency)."""
         try:
-            from databricks import sql as dbsql  # type: ignore
+            from databricks import sql as dbsql
         except Exception as e:  # pragma: no cover - import error surface
             raise ImportError(
                 "This feature requires the databricks-sql-connector package. Install with 'pip install EchoSphere[databricks]'"
@@ -37,6 +31,7 @@ class DatabricksRunner(BaseRunner):
 
     @classmethod
     def dispatch_test(cls, env: str | None, test_file_path: str) -> tuple[int, float, str]:
+        """Execute the SQL test file and return (row_count, execution_time_seconds, sql_text)."""
         cfg = DatabricksAgentConfig(env_name=env)
         with open(test_file_path, "r") as s:
             sql = s.read()
@@ -46,7 +41,7 @@ class DatabricksRunner(BaseRunner):
         logger.info("Executing Databricks test (COUNT wrapper)")
         start_time = time.time()
         try:
-            with cls._connect(cfg) as connection:  # type: ignore[attr-defined]
+            with cls._connect(cfg) as connection:
                 with connection.cursor() as cursor:
                     # Optional initial USE statements for catalog/schema if provided
                     if getattr(cfg, "catalog", None):
@@ -82,13 +77,14 @@ class DatabricksRunner(BaseRunner):
     def fetch_failure_sample(
         cls, env: str | None, sql: str, limit: int = 1000
     ) -> tuple[list[str], list[tuple[Any, ...]]]:
+        """Return (column_names, rows) for a limited sample of the failing SQL output."""
         cfg = DatabricksAgentConfig(env_name=env)
         sql_clean = sql.strip().rstrip(";")
         wrapped_sql = f"SELECT * FROM ({sql_clean}) AS t LIMIT {int(limit)}"
 
         logger.info("Fetching Databricks failure sample (limit=%s)", limit)
         try:
-            with cls._connect(cfg) as connection:  # type: ignore[attr-defined]
+            with cls._connect(cfg) as connection:
                 with connection.cursor() as cursor:
                     if getattr(cfg, "catalog", None):
                         try:

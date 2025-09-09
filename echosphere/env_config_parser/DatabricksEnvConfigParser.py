@@ -1,26 +1,15 @@
 from configparser import ConfigParser
-from typing import Optional
 
 
 class DatabricksAgentConfig:
-    """
-    Load Databricks agent configuration from `es.ini`.
+    """Load Databricks connection settings from es.ini for the selected environment."""
 
-    This class reads the `es.ini` file and extracts the connection parameters for a
-    selected environment section. If no env name is provided, it uses the `[default]`
-    section's `env` key to resolve the active environment.
+    def __init__(self, env_name: str | None = None) -> None:
+        """
+        Initialize configuration using the given env section or default.
 
-    Required keys in the target section:
-      - server_hostname
-      - http_path
-      - access_token
-
-    Optional keys:
-      - catalog
-      - schema
-    """
-
-    def __init__(self, env_name: Optional[str] = None) -> None:
+        :param env_name: Environment section name; if None, use [default].env.
+        """
         config = ConfigParser()
         config.read("es.ini")
         section = config.get("default", "env") if not env_name else env_name
