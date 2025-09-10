@@ -49,6 +49,7 @@ nav:
   - User Guide:
       - Overview: user-guide/index.md
       - Writing Tests: writing-tests/index.md
+      - Using Fully-Qualified Table Names: user-guide/using_qualified_names.md
       - Command Reference: command-reference/index.md
   - Reference:
       - Configuration: reference/configuration.md
@@ -61,6 +62,7 @@ nav:
       - Large-Scale Management: advanced/large-scale.md
   - Examples & Tutorials:
       - Cookbook: examples/cookbook.md
+  - Supported Platforms: supported-platforms/index.md
   - Troubleshooting: troubleshooting/index.md
   - Contributing: contributing.md
 
