@@ -4,8 +4,8 @@ from typing import Sequence
 from rich import print
 
 from echosphere.core.db_runner import get_db_runner
-from echosphere.core.test_result import TestResult
 from echosphere.core.platforms import PlatformEnum
+from echosphere.core.test_result import TestResult
 from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 
 FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"

@@ -122,6 +122,13 @@ es run -e env.snowflake.dev
   <em>Derived from the mythological nymph Echo — cursed to repeat the words of others — the name symbolizes reflection and reverberation. Echo's voice lingered in caves and valleys, mirroring sounds across vast expanses.</em>
 </details>
 
+## List of Databases to be added in the future
+- [ ] Amazon Redshift
+- [ ] Google BigQuery
+- [ ] Firebolt
+- [ ] Azure Synapse
+- [ ] Microsoft SQL Server
+
 ## 📄 License
 No explicit license file is present in this repository at the moment. Please refer to the repository owner for licensing details.
 

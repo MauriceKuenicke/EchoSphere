@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 from typing import Union
-from echosphere.core.platforms import PlatformEnum, SETUP_INI_FILE_MAPPING, EXAMPLE_SQL_FOLDER_MAPPING
+
 import typer
 
+from echosphere.core.platforms import EXAMPLE_SQL_FOLDER_MAPPING, SETUP_INI_FILE_MAPPING, PlatformEnum
 
 INIT_FILE_TO_BE_CREATED_NAME = "es.ini"
 ES_SUITE_TO_BE_CREATED_DEFAULT_DIR = "es_suite"
