@@ -11,15 +11,13 @@ This section helps you install EchoSphere, perform the first-time setup, and run
 ## Installation Options
 
 ### Using pip (recommended)
+EchoSphere does not contain the platform-specific drivers on a default install.
+Make sure to provide the extra dependencies for your platform of choice when installing EchoSphere.
 ```sh
-# Install from PyPI with platform extras:
-# Snowflake:
-pip install EchoSphere[snowflake]
-# Postgres:
-pip install EchoSphere[postgres]
-
-# Alternatively, install latest from GitHub:
-pip install git+https://github.com/MauriceKuenicke/EchoSphere
+# Example Snowflake:
+pip install "EchoSphere[snowflake] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
+# Example Postgres:
+pip install "EchoSphere[postgres] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
 ```
 
 ### From source (development)
@@ -31,19 +29,20 @@ cd EchoSphere
 # install in editable mode
 pip install -e .[dev]
 ```
+This will install EchoSphere and all its dependencies into your local Python environment.
 
 ## Initial Configuration
-After installation, run the setup command to scaffold a test suite and configuration:
+After installation, run the setup command to scaffold a test suite and configuration.
 
 ```sh
-es setup --platform SNOWFLAKE  # or POSTGRES
+es setup --platform SNOWFLAKE
 ```
 
 This will:
-- create a default folder for your SQL tests
-- create a configuration file for your platform credentials and environments
+- Create a default folder for your SQL tests
+- Create a configuration file for your platform credentials and environments
 
-Note: If you omit the platform, EchoSphere will ask for one. Use `--help` to list platforms.
+Note: If you omit the platform, EchoSphere will ask for one. Use `--help` to list platforms or visit the documentation [here](../supported-platforms/index.md).
 
 ## Hello World: First Test
 1. Create a file named `example.es.sql` in your tests directory.
@@ -71,8 +70,8 @@ Tip: You can export results to JUnit XML and export failing rows to Excel. See t
 
 ## 5‑Minute Quickstart
 1. Install EchoSphere
-2. Run `es setup --platform SNOWFLAKE` or `es setup --platform POSTGRES`
+2. Run `es setup --platform SNOWFLAKE` or your platform of choice
 3. Configure your platform credentials in `es.ini`
-4. Add `orders_total.es.sql` with your first assertion query
+4. Add `example.es.sql` with your first assertion query
 5. Run `es run -e dev` and inspect the output
-6. Optional: `es run -e dev --junitxml reports/junit.xml --export-failures reports/failures.xlsx`
+6. Optional: `es run -e dev --export-failures reports/failures.xlsx` to view failing test results in Excel

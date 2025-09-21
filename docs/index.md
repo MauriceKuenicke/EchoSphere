@@ -1,10 +1,21 @@
 # EchoSphere
 
-EchoSphere is a fast, lightweight SQL testing framework designed to validate your data workflows with simple, readable SQL files. It focuses on developer experience and velocity: write tests as SQL, run them in parallel, and integrate the results into your CI/CD.
+<a href="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml">
+    <img alt="Docs Deploy Status" src="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml/badge.svg">
+  </a>
+  <a href="https://github.com/MauriceKuenicke/EchoSphere/releases">
+    <img alt="Version" src="https://img.shields.io/badge/version-v0.0.0-blue"></a>
+  <a href="https://www.python.org/downloads/release/python-3100/">
+    <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue"></a>
+
+EchoSphere is a fast, lightweight SQL testing framework designed to validate your 
+data quality with simple, readable SQL files.
+It focuses on developer experience and velocity.
+Write tests as SQL, run them in parallel, and integrate the results into your CI/CD.
 
 > EchoSphere derives from the mythological nymph Echo — a symbol of reflection and resonance. Your tests “echo” the health of your data systems.
 
-## Runs your tests on 🔬
+## Supported Connectors 🔬
 <p style="margin-top: 0.5rem;">
     <img src="assets/img/postgres.svg" alt="PostgreSQL" width="48" style="vertical-align: -6px;" />
   &nbsp;&nbsp;
@@ -14,10 +25,10 @@ EchoSphere is a fast, lightweight SQL testing framework designed to validate you
 </p>
 
 ## Why EchoSphere? ⚡
-- Simple: Tests are plain SQL files with a `.es.sql` suffix
+- Simple: Tests are plain SQL (`.es.sql`) files
 - Fast: Concurrent execution for quick feedback
-- CI-ready: JUnit output, clear exit codes, and machine-readable results
-- Visibility: Export data issues into local Excel files
+- CI-ready: JUnit output and machine-readable results
+- Visibility: Export data issues into Excel files
 
 ## Quick Links 🔗
 - [Getting Started](getting-started/index.md): installation, first setup, and a 5‑minute quickstart
@@ -27,7 +38,9 @@ EchoSphere is a fast, lightweight SQL testing framework designed to validate you
 - [Troubleshooting](troubleshooting/index.md): common issues and debugging tips
 
 ## What a Test Looks Like 🧪
-EchoSphere considers a test successful if it returns zero rows. If the query returns one or more rows, the test fails and the rows explain what was wrong.
+EchoSphere considers a test successful if it returns zero rows. That is the only requirement.
+Everything else is up to you.
+If the query returns one or more rows, the test fails and the rows explain what went wrong.
 
 ```sql
 -- file: tests/orders_total.es.sql
@@ -40,6 +53,3 @@ FROM (
 WHERE total <> 944870465.07;
 ```
 
-## Latest Version and Changelog 📝
-- Versioning aligns with project releases on GitHub.
-- See the repository releases tab for changelog highlights.

@@ -1,7 +1,7 @@
 <div align="center">
   <a href="https://mauricekuenicke.github.io/EchoSphere/"><img src="docs/assets/logo-color-cropped.svg" alt="EchoSphere logo" width="60%"></a>
 
-  <h3>Modern SQL Testing</h3>
+  <h3>Modern SQL-First Data Warehouse Testing</h3>
 
   <a href="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml">
     <img alt="Docs Deploy Status" src="https://github.com/MauriceKuenicke/EchoSphere/actions/workflows/deploy_docs.yaml/badge.svg">
@@ -25,9 +25,7 @@
 ---
 
 ## ✨ Overview
-EchoSphere helps you write and run maintainable, SQL-first tests against your Snowflake data warehouse. Catch data issues early, build confidence in your pipelines, and run checks at scale without leaving SQL.
-
-> Snowflake focus today. Engine-agnostic design enables future database support.
+EchoSphere helps you write and run maintainable, SQL-first tests against your data warehouse. Catch data issues early, build confidence in your pipelines, and run checks at scale without leaving SQL.
 
 ## 🚀 Key Features
 - Fast, parallel test execution across environments
@@ -36,6 +34,16 @@ EchoSphere helps you write and run maintainable, SQL-first tests against your Sn
 - CI/CD friendly output and exports (e.g., JUnit/XML, Excel)
 - Clear environment isolation and switching per run
 - Built for teams: structure, conventions, and reporting
+
+
+## Supported Connectors 🔬
+<p style="margin-top: 0.5rem;">
+    <img src="docs/assets/img/postgres.svg" alt="PostgreSQL" width="48" style="vertical-align: -6px;" />
+  &nbsp;&nbsp;
+    <img src="docs/assets/img/snowflake.svg" alt="Snowflake" width="48" style="vertical-align: -6px;" />
+  &nbsp;&nbsp;
+    <img src="docs/assets/img/databricks.svg" alt="Databricks" width="48" style="vertical-align: -6px;" />
+</p>
 
 ## 📦 Quick Start
 
