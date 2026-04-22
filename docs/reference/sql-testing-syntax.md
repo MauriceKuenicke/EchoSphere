@@ -10,6 +10,22 @@ This design keeps tests readable and leverages the full expressiveness of SQL.
 
 ## Patterns
 
+### Metadata Header
+EchoSphere supports optional metadata comments at the beginning of a test:
+
+```sql
+-- @name: Example Test
+-- @tag: critical, nightly
+-- @timeout: 30
+SELECT ...
+```
+
+- `@name`: Friendly test name for terminal output and exports
+- `@tag`: Comma-separated tags for `es run --tag` and `es run --exclude-tag`
+- `@timeout`: Timeout in seconds for that test
+
+Only leading comment lines are parsed as metadata.
+
 ### Assert Equality
 Return a row only when the value differs.
 ```sql

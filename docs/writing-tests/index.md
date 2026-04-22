@@ -26,6 +26,22 @@ Example layout:
 - Use descriptive, intent‑revealing names: `no_null_customer_ids.es.sql`
 - Consider a prefix for categories or ownership if helpful
 
+## Metadata Comments
+You can define optional metadata at the top of a test file using SQL comments:
+
+```sql
+-- @name: Example Test
+-- @tag: critical, nightly
+-- @timeout: 30
+SELECT ...
+```
+
+- `@name`: Display name used in run output and reports
+- `@tag`: Comma-separated tags used for filtering (`es run --tag ...`, `es run --exclude-tag ...`)
+- `@timeout`: Per-test timeout in seconds
+
+Metadata is only parsed from the leading comment block at the start of the file.
+
 ## Example Tests
 Validate a specific aggregation is as expected:
 ```sql

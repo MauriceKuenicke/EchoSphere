@@ -61,6 +61,9 @@ This creates a default location for your SQL tests and a configuration file with
 ### Write your first test
 Create a file like tests/my_first_test.es.sql:
 ```sql
+-- @name: Orders Total Validation
+-- @tag: critical, nightly
+-- @timeout: 30
 -- Expect 0 rows when the rule holds
 SELECT *
 FROM (
@@ -79,6 +82,10 @@ es run
 
 # Run against a specific env
 es run -e env.snowflake.dev
+
+# Run only tagged tests
+es run --tag critical
+es run --tag nightly --exclude-tag slow
 ```
 
 # Run with exports

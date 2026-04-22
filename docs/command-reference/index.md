@@ -37,6 +37,12 @@ ES_ENV_NAME=dev es run
 
 # export JUnit XML and failed rows to Excel
 es run -e dev --junitxml reports/junit.xml --export-failures reports/failures.xlsx
+
+# run only tagged tests
+es run --tag critical
+
+# exclude slow tests
+es run --exclude-tag slow
 ```
 
 Options:
@@ -48,9 +54,17 @@ Options:
 - --export-failures PATH
   - Write an Excel (.xlsx) with failing test result rows to PATH (directories will be created if missing).
   - Captures up to 1000 rows per failed test (including column headers). May increase query time and warehouse/DB cost.
+- --tag TAG
+  - Run only tests that include at least one matching tag.
+  - You can repeat this option or pass comma-separated values.
+  - Tags come from SQL metadata comments like `-- @tag: critical, nightly`.
+- --exclude-tag TAG
+  - Skip tests that include any matching tag.
+  - You can repeat this option or pass comma-separated values.
 
 Behavior:
 - Discovers tests with the `.es.sql` suffix
+- Reads optional metadata comments at the top of each SQL test (`@name`, `@tag`, `@timeout`)
 - A test passes if the executed SQL returns zero rows
 - Runs tests concurrently and prints a summary
 - Non‑zero exit on any failure
