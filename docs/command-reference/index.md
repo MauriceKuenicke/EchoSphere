@@ -14,15 +14,22 @@ Initialize EchoSphere for your platform and scaffold a suite and configuration.
 
 Usage:
 ```sh
-es setup --platform SNOWFLAKE  # or POSTGRES
+es setup --platform SNOWFLAKE
+es setup --platform POSTGRES
+es setup --platform DATABRICKS
+es setup --platform SQLITE
+es setup --platform TUTORIAL
 ```
 
 - --platform PLATFORM
-  - Required. Select the target platform to configure. Supported: `SNOWFLAKE`, `POSTGRES`.
+  - Required. Select the target platform to configure. Supported: `SNOWFLAKE`, `POSTGRES`, `DATABRICKS`, `SQLITE`, `TUTORIAL`.
+- --plattform PLATFORM
+  - German alias for `--platform`.
 
 What it does:
 - Creates a default tests directory
 - Generates a configuration file (`es.ini`) with environment stanzas
+- `TUTORIAL` additionally creates and seeds a local SQLite database.
 
 ## es run
 Run all discovered tests concurrently.

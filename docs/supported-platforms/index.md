@@ -8,6 +8,8 @@ configuration values required for the setup.
 1. ![PostgreSQL](../assets/img/postgres.svg){ width=20 style="vertical-align: -3px" } [PostgreSQL](#postgresql) ✅
 2. ![Snowflake](../assets/img/snowflake.svg){ width=20 style="vertical-align: -3px" } [Snowflake](#snowflake) ✅
 3. ![Databricks](../assets/img/databricks.svg){ width=20 style="vertical-align: -3px" } [Databricks](#databricks) ✅
+4. SQLite ✅
+5. Tutorial (SQLite local starter) ✅
 
 ## In Planning
 3. [Firebolt](#databricks) ❌
@@ -94,3 +96,29 @@ access_token = your-access-token
 ```
 
 ---
+
+## SQLite
+
+SQLite uses a local file database and requires only a database file path.
+
+**Configuration Values:**
+- `database`: Relative or absolute path to the SQLite `.db` file.
+
+**Example Configuration File:**
+```ini
+[default]
+env = env.sqlite.dev
+
+[env.sqlite.dev]
+platform = sqlite
+database = ./.echosphere/tutorial.db
+```
+
+---
+
+## Tutorial
+
+`TUTORIAL` is a setup shortcut built on top of SQLite:
+
+- uses the same configuration as `SQLITE`
+- additionally creates and seeds a local SQLite database for immediate testing

@@ -9,6 +9,8 @@ class PlatformEnum(str, Enum):
     SNOWFLAKE = "snowflake"
     DATABRICKS = "databricks"
     POSTGRES = "postgres"
+    SQLITE = "sqlite"
+    TUTORIAL = "tutorial"
 
 
 SETUP_FILES_DIR = "ini_setup_files"
@@ -31,10 +33,14 @@ SETUP_INI_FILE_MAPPING = {
     PlatformEnum.SNOWFLAKE.value: get_resource_path(SETUP_FILES_DIR, "snowflake.ini"),
     PlatformEnum.POSTGRES.value: get_resource_path(SETUP_FILES_DIR, "postgres.ini"),
     PlatformEnum.DATABRICKS.value: get_resource_path(SETUP_FILES_DIR, "databricks.ini"),
+    PlatformEnum.SQLITE.value: get_resource_path(SETUP_FILES_DIR, "sqlite.ini"),
+    PlatformEnum.TUTORIAL.value: get_resource_path(SETUP_FILES_DIR, "sqlite.ini"),
 }
 
 EXAMPLE_SQL_FOLDER_MAPPING = {
     PlatformEnum.SNOWFLAKE.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.snowflake"),
     PlatformEnum.POSTGRES.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.postgres"),
     PlatformEnum.DATABRICKS.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.databricks"),
+    PlatformEnum.SQLITE.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.sqlite"),
+    PlatformEnum.TUTORIAL.value: importlib.resources.files(f"echosphere.core.{EXAMPLE_QUERY_DIR}.sqlite"),
 }

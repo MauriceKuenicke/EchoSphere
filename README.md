@@ -43,6 +43,8 @@ EchoSphere helps you write and run maintainable, SQL-first tests against your da
     <img src="docs/assets/img/snowflake.svg" alt="Snowflake" width="48" style="vertical-align: -6px;" />
   &nbsp;&nbsp;
     <img src="docs/assets/img/databricks.svg" alt="Databricks" width="48" style="vertical-align: -6px;" />
+  &nbsp;&nbsp;
+    <img src="docs/assets/img/sqlite.svg" alt="SQLite" width="105" style="vertical-align: -10px;" scale="2" />
 </p>
 
 ## 📦 Quick Start
@@ -54,9 +56,12 @@ pip install "EchoSphere[snowflake,postgres] @ git+https://github.com/MauriceKuen
 
 ### First-time setup
 ```sh
-es setup
+es setup --platform SQLITE
+# or local guided starter:
+es setup --platform TUTORIAL
 ```
-This creates a default location for your SQL tests and a configuration file with Snowflake credentials and environments.
+This creates a default location for your SQL tests and a configuration file with environment stanzas.
+`TUTORIAL` additionally creates and seeds a local SQLite database.
 
 ### Write your first test
 Create a file like tests/my_first_test.es.sql:

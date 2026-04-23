@@ -36,6 +36,10 @@ After installation, run the setup command to scaffold a test suite and configura
 
 ```sh
 es setup --platform SNOWFLAKE
+# SQLite quickstart (local file DB)
+es setup --platform SQLITE
+# Full local tutorial setup (SQLite + seeded DB)
+es setup --platform TUTORIAL
 ```
 
 This will:
@@ -70,7 +74,7 @@ Tip: You can export results to JUnit XML and export failing rows to Excel. See t
 
 ## 5‑Minute Quickstart
 1. Install EchoSphere
-2. Run `es setup --platform SNOWFLAKE` or your platform of choice
+2. Run `es setup --platform SNOWFLAKE` (or `POSTGRES`, `DATABRICKS`, `SQLITE`, `TUTORIAL`)
 3. Configure your platform credentials in `es.ini`
 4. Add `example.es.sql` with your first assertion query
 5. Run `es run -e dev` and inspect the output

@@ -28,6 +28,11 @@ def get_db_runner(platform: str) -> Type[BaseRunner]:
             raise ImportError(
                 "This feature requires the databricks extra. Install with 'pip install EchoSphere[databricks]'"
             )
+    elif platform in {"sqlite", "tutorial"}:
+        try:
+            from echosphere.core.db_runner.SQLiteRunner import SQLiteRunner as Runner  # type: ignore [assignment]
+        except ImportError:
+            raise ImportError("Failed to load SQLite runner.")
     else:
         raise Exception(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
     return Runner
