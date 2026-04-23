@@ -5,10 +5,10 @@ from pathlib import Path
 import typer
 
 from echosphere.core.platforms import PlatformEnum
+from echosphere.core.setup_es import INIT_FILE_TO_BE_CREATED_NAME
 
-
-INIT_FILE_TO_BE_CREATED_NAME = "es.ini"
 TUTORIAL_SQLITE_DB_FALLBACK = Path(".echosphere") / "tutorial.db"
+
 
 def get_sqlite_database_path_from_config() -> Path:
     """
@@ -45,19 +45,19 @@ def setup_tutorial_sqlite_database() -> None:
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS customers (
-                                                     customer_id INTEGER PRIMARY KEY,
-                                                     customer_name TEXT NOT NULL
+                customer_id INTEGER PRIMARY KEY,
+                customer_name TEXT NOT NULL
             )
             """
         )
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS orders (
-                                                  order_id INTEGER PRIMARY KEY,
-                                                  customer_id INTEGER NOT NULL,
-                                                  amount REAL NOT NULL,
-                                                  created_at TEXT NOT NULL,
-                                                  FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+                order_id INTEGER PRIMARY KEY,
+                customer_id INTEGER NOT NULL,
+                amount REAL NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
                 )
             """
         )
@@ -83,8 +83,6 @@ def setup_tutorial_sqlite_database() -> None:
                     (1003, 3, 99.50, "2026-01-20"),
                 ],
             )
-
-        conn.commit()
 
     action = "Using existing" if db_existed_before else "Created"
     typer.echo(f"{action} tutorial SQLite database at '{db_path}'.")

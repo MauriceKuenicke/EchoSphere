@@ -23,8 +23,6 @@ es setup --platform TUTORIAL
 
 - --platform PLATFORM
   - Required. Select the target platform to configure. Supported: `SNOWFLAKE`, `POSTGRES`, `DATABRICKS`, `SQLITE`, `TUTORIAL`.
-- --plattform PLATFORM
-  - German alias for `--platform`.
 
 What it does:
 - Creates a default tests directory

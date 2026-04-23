@@ -8,15 +8,15 @@ configuration values required for the setup.
 1. ![PostgreSQL](../assets/img/postgres.svg){ width=20 style="vertical-align: -3px" } [PostgreSQL](#postgresql) ✅
 2. ![Snowflake](../assets/img/snowflake.svg){ width=20 style="vertical-align: -3px" } [Snowflake](#snowflake) ✅
 3. ![Databricks](../assets/img/databricks.svg){ width=20 style="vertical-align: -3px" } [Databricks](#databricks) ✅
-4. SQLite ✅
+4. ![SQLite](../assets/img/sqlite.svg){ width=100 style="vertical-align: -6px" } [SQLite](#sqlite) ✅
 5. Tutorial (SQLite local starter) ✅
 
 ## In Planning
-3. [Firebolt](#databricks) ❌
-4. [AWS Redshift](#databricks) ❌
-5. [Azure Synapse](#databricks) ❌
-6. [Google BigQuery](#databricks) ❌
-7. [MS SQL Server](#databricks) ❌
+3. [Firebolt](#) ❌
+4. [AWS Redshift](#) ❌
+5. [Azure Synapse](#) ❌
+6. [Google BigQuery](#) ❌
+7. [MS SQL Server](#) ❌
 
 ---
 
