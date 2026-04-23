@@ -9,14 +9,14 @@ def get_db_runner(platform: str) -> Type[BaseRunner]:
         try:
             from echosphere.core.db_runner.SnowflakeRunner import SnowflakeRunner as Runner
         except ImportError:
-            raise ImportError(
+            raise ValueError(
                 "This feature requires the snowflake extra. Install with 'pip install EchoSphere[snowflake]'"
             )
     elif platform == "postgres":
         try:
             from echosphere.core.db_runner.PostgresRunner import PostgresRunner as Runner  # type: ignore [assignment]
         except ImportError:
-            raise ImportError(
+            raise ValueError(
                 "This feature requires the postgres extra. Install with 'pip install EchoSphere[postgres]'"
             )
     elif platform == "databricks":
@@ -25,9 +25,11 @@ def get_db_runner(platform: str) -> Type[BaseRunner]:
                 DatabricksRunner as Runner,
             )
         except ImportError:
-            raise ImportError(
+            raise ValueError(
                 "This feature requires the databricks extra. Install with 'pip install EchoSphere[databricks]'"
             )
+    elif platform in {"sqlite", "tutorial"}:
+        from echosphere.core.db_runner.SQLiteRunner import SQLiteRunner as Runner  # type: ignore [assignment]
     else:
-        raise Exception(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
+        raise ValueError(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
     return Runner

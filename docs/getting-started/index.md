@@ -32,10 +32,14 @@ pip install -e .[dev]
 This will install EchoSphere and all its dependencies into your local Python environment.
 
 ## Initial Configuration
-After installation, run the setup command to scaffold a test suite and configuration.
+After installation, run the init command to scaffold a test suite and configuration.
 
 ```sh
-es setup --platform SNOWFLAKE
+es init --platform SNOWFLAKE
+# SQLite quickstart (local file DB)
+es init --platform SQLITE
+# Full local tutorial setup (SQLite + seeded DB)
+es init --platform TUTORIAL
 ```
 
 This will:
@@ -70,7 +74,7 @@ Tip: You can export results to JUnit XML and export failing rows to Excel. See t
 
 ## 5‑Minute Quickstart
 1. Install EchoSphere
-2. Run `es setup --platform SNOWFLAKE` or your platform of choice
+2. Run `es init --platform SNOWFLAKE` (or `POSTGRES`, `DATABRICKS`, `SQLITE`, `TUTORIAL`)
 3. Configure your platform credentials in `es.ini`
 4. Add `example.es.sql` with your first assertion query
 5. Run `es run -e dev` and inspect the output

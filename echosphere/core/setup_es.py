@@ -5,6 +5,7 @@ from typing import Union
 import typer
 
 from echosphere.core.platforms import EXAMPLE_SQL_FOLDER_MAPPING, SETUP_INI_FILE_MAPPING, PlatformEnum
+from echosphere.core.setup_tutorial_sqlite_db import setup_tutorial_sqlite_database
 
 INIT_FILE_TO_BE_CREATED_NAME = "es.ini"
 ES_SUITE_TO_BE_CREATED_DEFAULT_DIR = "es_suite"
@@ -84,3 +85,6 @@ def init_es(platform: Union[str, PlatformEnum], dir_name: str = ES_SUITE_TO_BE_C
     """
     setup_es_directory(dir_name, platform)
     setup_config_file(platform)
+    platform_key = platform.value if isinstance(platform, PlatformEnum) else platform
+    if platform_key == PlatformEnum.TUTORIAL.value:
+        setup_tutorial_sqlite_database()

@@ -31,7 +31,7 @@ app = typer.Typer(
 app.add_typer(view.app, name="view")
 
 
-@app.command(name="setup", help="Create the necessary setup.")
+@app.command(name="init", help="Create the necessary setup.")
 def configure_setup(platform: PlatformEnum = typer.Option(None, help="Platform to configure.")) -> None:
     """
     Initialize EchoSphere for the selected platform by creating config and example suite.
