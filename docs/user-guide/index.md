@@ -11,7 +11,7 @@ This section covers day-to-day workflows, environment setup, writing effective t
 Use this guide if you prefer task-oriented, practical how‑to instructions.
 
 ## Typical Workflow
-1. Initialize: `es setup --platform SNOWFLAKE` or `es setup --platform POSTGRES`
+1. Initialize: `es init --platform SNOWFLAKE` or `es init --platform POSTGRES` (also supports `DATABRICKS`, `SQLITE`, `TUTORIAL`)
 2. Configure `es.ini` with credentials and defaults
 3. Create tests: add `.es.sql` files expressing assertions
 4. Run: `es run -e dev`

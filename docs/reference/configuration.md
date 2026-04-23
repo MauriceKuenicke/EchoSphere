@@ -42,9 +42,11 @@ sslmode = ...  # optional
 - [default]
   - `env`: the environment name to use when no `--environment` is provided.
 - [env.<platform>.<name>]
-  - `platform`: `snowflake` or `postgres`.
+  - `platform`: `snowflake`, `postgres`, `databricks`, or `sqlite`.
   - For Snowflake: `user`, `password`, `account`, `warehouse`, `role`, `database`, `schema`.
   - For Postgres: `host`, `port`, `database`, `schema`, `user`, `password`, `sslmode` (optional).
+  - For Databricks: `server_hostname`, `http_path`, `access_token`, optional `catalog`, optional `schema`.
+  - For SQLite: `database` (path to local sqlite database file).
 
 ## Selecting the Environment
 - CLI option: `es run --environment dev`
