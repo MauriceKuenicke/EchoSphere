@@ -14,9 +14,9 @@ class SQLiteAgentConfig:
         config.read("es.ini")
         section = config.get("default", "env") if not env_name else env_name
         if not config.has_section(section):
-            raise ImportError(f"Environment section '{section}' not found in es.ini")
+            raise ValueError(f"Environment section '{section}' not found in es.ini")
 
         if config.has_option(section, "database"):
             self.database: str = config.get(section, "database")
         else:
-            raise ImportError(f"Missing 'database' in section [{section}] of es.ini")
+            raise ValueError(f"Missing 'database' in section [{section}] of es.ini")

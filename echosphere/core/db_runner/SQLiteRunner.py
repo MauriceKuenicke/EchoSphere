@@ -22,8 +22,8 @@ class SQLiteRunner(BaseRunner):
             cur = conn.cursor()
             start_time = time.time()
             cur.execute(count_sql)
-            row = cur.fetchone()
             end_time = time.time()
+            row = cur.fetchone()
 
         if not row:
             raise Exception("Failed to retrieve row count from SQLite.")
@@ -43,6 +43,6 @@ class SQLiteRunner(BaseRunner):
         with sqlite3.connect(cfg.database) as conn:
             cur = conn.cursor()
             cur.execute(wrapped_sql)
-            rows = cur.fetchmany(size=limit)
+            rows = cur.fetchall()
             cols = [d[0] for d in cur.description] if cur.description else []
         return list(cols), list(rows)
