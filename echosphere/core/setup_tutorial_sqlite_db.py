@@ -5,9 +5,9 @@ from pathlib import Path
 import typer
 
 from echosphere.core.platforms import PlatformEnum
-from echosphere.core.setup_es import INIT_FILE_TO_BE_CREATED_NAME
 
 TUTORIAL_SQLITE_DB_FALLBACK = Path(".echosphere") / "tutorial.db"
+INIT_FILE_TO_BE_CREATED_NAME = "es.ini"
 
 
 def get_sqlite_database_path_from_config() -> Path:

@@ -56,9 +56,9 @@ pip install "EchoSphere[snowflake,postgres] @ git+https://github.com/MauriceKuen
 
 ### First-time setup
 ```sh
-es setup --platform SQLITE
+es init --platform SQLITE
 # or local guided starter:
-es setup --platform TUTORIAL
+es init --platform TUTORIAL
 ```
 This creates a default location for your SQL tests and a configuration file with environment stanzas.
 `TUTORIAL` additionally creates and seeds a local SQLite database.

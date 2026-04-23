@@ -34,7 +34,7 @@ SETUP_INI_FILE_MAPPING = {
     PlatformEnum.POSTGRES.value: get_resource_path(SETUP_FILES_DIR, "postgres.ini"),
     PlatformEnum.DATABRICKS.value: get_resource_path(SETUP_FILES_DIR, "databricks.ini"),
     PlatformEnum.SQLITE.value: get_resource_path(SETUP_FILES_DIR, "sqlite.ini"),
-    PlatformEnum.TUTORIAL.value: get_resource_path(SETUP_FILES_DIR, "sqlite.ini"),
+    PlatformEnum.TUTORIAL.value: get_resource_path(SETUP_FILES_DIR, "sqlite_tutorial.ini"),
 }
 
 EXAMPLE_SQL_FOLDER_MAPPING = {

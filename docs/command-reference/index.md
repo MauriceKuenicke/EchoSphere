@@ -9,16 +9,16 @@ EchoSphere uses the `es` command with subcommands.
 - Exit code 0: success, non‑zero: failure.
 - Some options accept environment variables for convenience.
 
-## es setup
+## es init
 Initialize EchoSphere for your platform and scaffold a suite and configuration.
 
 Usage:
 ```sh
-es setup --platform SNOWFLAKE
-es setup --platform POSTGRES
-es setup --platform DATABRICKS
-es setup --platform SQLITE
-es setup --platform TUTORIAL
+es init --platform SNOWFLAKE
+es init --platform POSTGRES
+es init --platform DATABRICKS
+es init --platform SQLITE
+es init --platform TUTORIAL
 ```
 
 - --platform PLATFORM
