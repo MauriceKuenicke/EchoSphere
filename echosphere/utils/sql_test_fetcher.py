@@ -1,6 +1,10 @@
 import glob
 import os
+import re
 from typing import TypedDict
+
+SQL_FILE_EXT = ".es.sql"
+METADATA_PATTERN = re.compile(r"^\s*--\s*@(?P<key>name|tag|timeout)\s*:\s*(?P<value>.*?)\s*$", re.IGNORECASE)
 
 
 class TestFileInfo(TypedDict):
@@ -8,6 +12,76 @@ class TestFileInfo(TypedDict):
 
     full_path: str
     subfolder: str | None
+    name: str | None
+    tags: list[str]
+    timeout: int | None
+
+
+def _parse_timeout(value: str, file_path: str) -> int:
+    """
+    Parse timeout metadata as a positive integer number of seconds.
+
+    :param value: Raw timeout value from metadata comment.
+    :param file_path: SQL file path for contextual error reporting.
+    :return: Parsed timeout in seconds.
+    """
+    timeout_str = value.strip()
+    try:
+        timeout_seconds = int(timeout_str)
+    except ValueError as exc:
+        raise ValueError(f"Invalid @timeout value '{value}' in '{file_path}'. Expected a positive integer.") from exc
+
+    if timeout_seconds <= 0:
+        raise ValueError(f"Invalid @timeout value '{value}' in '{file_path}'. Expected a value greater than zero.")
+    return timeout_seconds
+
+
+def parse_sql_test_metadata(file_path: str) -> tuple[str | None, list[str], int | None]:
+    """
+    Parse supported metadata comments from the start of a SQL test file.
+
+    Supported keys:
+    - @name: Free-form display name
+    - @tag: Comma-separated tags
+    - @timeout: Positive integer timeout (seconds)
+
+    Only metadata found in leading comment/blank lines is considered. Once the
+    first non-comment SQL line appears, metadata parsing stops.
+
+    :param file_path: Path to the SQL test file.
+    :return: Tuple of (name, tags, timeout_seconds).
+    """
+    name: str | None = None
+    tags: list[str] = []
+    timeout: int | None = None
+
+    with open(file_path, "r", encoding="utf-8") as sql_file:
+        for raw_line in sql_file:
+            line = raw_line.lstrip("\ufeff")
+            stripped = line.strip()
+
+            if not stripped:
+                continue
+
+            if not stripped.startswith("--"):
+                break
+
+            metadata_match = METADATA_PATTERN.match(stripped)
+            if not metadata_match:
+                continue
+
+            key = metadata_match.group("key").lower()
+            value = metadata_match.group("value").strip()
+
+            if key == "name":
+                name = value or None
+            elif key == "tag":
+                tags.extend(tag.strip().lower() for tag in value.split(",") if tag.strip())
+            elif key == "timeout":
+                timeout = _parse_timeout(value=value, file_path=file_path)
+
+    deduped_tags = sorted(set(tags))
+    return name, deduped_tags, timeout
 
 
 def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> dict[str, TestFileInfo]:
@@ -24,9 +98,10 @@ def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> d
     :return: A dictionary mapping the base names of the `.es.sql` files to dictionaries containing:
              - 'full_path': The complete path to the file
              - 'subfolder': The subfolder name if the file is in a subfolder, None otherwise
+             - 'name': Optional display name from metadata
+             - 'tags': Normalized tags from metadata
+             - 'timeout': Optional timeout in seconds from metadata
     """
-    SQL_FILE_EXT = ".es.sql"
-
     def process_file_path(f_p: str) -> tuple[str, str | None]:
         """Extract the file name and subfolder from a file path."""
         f_n = os.path.basename(f_p)[: -len(SQL_FILE_EXT)].lower()
@@ -46,11 +121,18 @@ def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> d
     for pattern in all_patterns:
         for file_path in glob.glob(pattern):
             file_name, folder = process_file_path(file_path)
+            name, tags, timeout = parse_sql_test_metadata(file_path=file_path)
 
             # Skip if we are filtering by subfolder and this file is not in that subfolder
             if subdir and folder != subdir:
                 continue
 
-            file_info[file_name] = {"full_path": file_path, "subfolder": folder}
+            file_info[file_name] = {
+                "full_path": file_path,
+                "subfolder": folder,
+                "name": name,
+                "tags": tags,
+                "timeout": timeout,
+            }
 
     return file_info

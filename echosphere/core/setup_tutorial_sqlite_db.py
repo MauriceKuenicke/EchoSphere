@@ -20,9 +20,6 @@ def get_sqlite_database_path_from_config() -> Path:
     config.read(INIT_FILE_TO_BE_CREATED_NAME)
     try:
         default_env = config.get("default", "env")
-        platform = config.get(default_env, "platform").lower()
-        if platform not in {PlatformEnum.SQLITE.value, PlatformEnum.TUTORIAL.value}:
-            return TUTORIAL_SQLITE_DB_FALLBACK
         db_path = config.get(default_env, "database")
         return Path(db_path)
     except Exception:

@@ -7,7 +7,7 @@ You can control EchoSphere behavior via environment variables.
   - Equivalent to passing `--environment` on the CLI.
   - Example:
     ```sh
-    ES_ENV_NAME=dev es run
+    ES_ENV_NAME=env.snowflake.dev es run
     ```
 
 Additional environment variables may be introduced in future releases as features evolve. Prefer the CLI options when available for clarity in scripts.

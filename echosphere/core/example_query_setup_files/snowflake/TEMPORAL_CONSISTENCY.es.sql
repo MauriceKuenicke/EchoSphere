@@ -1,3 +1,6 @@
+-- @name: Temporal Consistency
+-- @tag: example, snowflake, temporal
+-- @timeout: 60
 -- Verify data consistency across multiple tables
 SELECT
     l.l_orderkey,
@@ -13,4 +16,4 @@ WHERE
    -- Test temporal consistency
     l.l_shipdate < o.o_orderdate -- Ship date should not be before order date
    OR l.l_receiptdate < l.l_shipdate -- Receipt date should not be before ship date
-   OR (l.l_commitdate < o.o_orderdate) -- Commit date should not be before order date
+   OR (l.l_commitdate < o.o_orderdate); -- Commit date should not be before order date

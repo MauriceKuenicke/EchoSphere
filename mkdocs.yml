@@ -62,6 +62,7 @@ nav:
       - Large-Scale Management: advanced/large-scale.md
   - Examples & Tutorials:
       - Cookbook: examples/cookbook.md
+      - Tutorial Setup Walkthrough: examples/tutorial-setup.md
   - Supported Platforms: supported-platforms/index.md
   - Troubleshooting: troubleshooting/index.md
   - Contributing: contributing.md

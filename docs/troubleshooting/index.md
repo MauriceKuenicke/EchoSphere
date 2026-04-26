@@ -13,7 +13,7 @@ Having issues? This guide helps you diagnose and fix common problems.
 - Symptom: EchoSphere reports zero tests executed.
 - Checks:
   - Ensure test files end with `.es.sql`.
-  - Verify your tests directory path and that files are readable.
+  - Verify files are under `es_suite/` (or `es_suite/<subsuite>/`) and readable.
   - Run `es view tests --all` to see what EchoSphere detects.
 
 ## Failing Tests Without Clear Cause

@@ -1,3 +1,6 @@
+-- @name: Order Price Matches Item Sum
+-- @tag: example, snowflake, financial
+-- @timeout: 60
 -- Order total price should match sum of line items
 SELECT
     o.o_orderkey,

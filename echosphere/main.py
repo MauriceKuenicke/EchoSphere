@@ -31,6 +31,54 @@ app = typer.Typer(
 app.add_typer(view.app, name="view")
 
 
+def _normalize_tag_filters(values: list[str] | None) -> set[str]:
+    """
+    Normalize tag filters from repeated flags or comma-separated values.
+
+    :param values: Raw values passed via CLI options.
+    :return: Lower-cased, de-duplicated tag set.
+    """
+    if not values:
+        return set()
+
+    normalized: set[str] = set()
+    for raw_value in values:
+        for tag in raw_value.split(","):
+            cleaned = tag.strip().lower()
+            if cleaned:
+                normalized.add(cleaned)
+    return normalized
+
+
+def _should_run_test(test_tags: list[str], include_tags: set[str], exclude_tags: set[str]) -> bool:
+    """
+    Evaluate whether a test should run based on include/exclude tag filters.
+
+    Include semantics are OR-based: at least one include tag must match.
+    Exclude semantics are OR-based: any matching exclude tag removes the test.
+    """
+    normalized_test_tags = {tag.lower() for tag in test_tags}
+    if include_tags and normalized_test_tags.isdisjoint(include_tags):
+        return False
+    if exclude_tags and not normalized_test_tags.isdisjoint(exclude_tags):
+        return False
+    return True
+
+
+def _resolve_test_name(test_key: str, test_info: TestFileInfo) -> str:
+    """
+    Resolve the effective test name used in output/reporting.
+
+    Prefers metadata `@name`; otherwise falls back to `<subsuite>/<file>` or
+    `<file>` for root-level tests.
+    """
+    if test_info["name"]:
+        return test_info["name"]
+    if test_info["subfolder"]:
+        return f"{test_info['subfolder']}/{test_key}"
+    return test_key
+
+
 @app.command(name="init", help="Create the necessary setup.")
 def configure_setup(platform: PlatformEnum = typer.Option(None, help="Platform to configure.")) -> None:
     """
@@ -82,31 +130,58 @@ def run_suite(
             show_default=False,
         ),
     ] = None,
+    tag: Annotated[
+        list[str],
+        typer.Option(
+            "--tag",
+            help="Run only tests that match at least one tag. Repeat flag or use comma-separated values.",
+            rich_help_panel="Filtering",
+            show_default=False,
+        ),
+    ] = [],
+    exclude_tag: Annotated[
+        list[str],
+        typer.Option(
+            "--exclude-tag",
+            help="Skip tests that match any provided tag. Repeat flag or use comma-separated values.",
+            rich_help_panel="Filtering",
+            show_default=False,
+        ),
+    ] = [],
 ) -> None:
     """
     Run all tests.
     :return:
     """
     s_t = time.time()
+    include_tags = _normalize_tag_filters(tag)
+    exclude_tags = _normalize_tag_filters(exclude_tag)
+    all_test_files: dict[str, TestFileInfo] = get_sql_test_files()
+    test_files: dict[str, TestFileInfo] = {
+        test_key: test_info
+        for test_key, test_info in all_test_files.items()
+        if _should_run_test(test_info["tags"], include_tags, exclude_tags)
+    }
+
     print("================================================================")
     print("[bold]Test Suite[/bold]")
     print("================================================================")
-    display_test_names_table()
+    display_test_names_table(test_files=test_files)
     print("\n================================================================")
     print("[bold]Starting Async EchoSphere Test Run[/bold]")
     print("================================================================")
 
     results: list[TestResult] = []
-    test_files: dict[str, TestFileInfo] = get_sql_test_files()
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         futures: list[concurrent.futures.Future[TestResult]] = []
-        for t_n, t_fp in test_files.items():
+        for test_key, test_file in test_files.items():
             fut = executor.submit(
                 run_async_test_and_poll,
-                t_n,
-                t_fp["full_path"],
-                env,
-                bool(export_failures),
+                test_name=_resolve_test_name(test_key, test_file),
+                test_file_path=test_file["full_path"],
+                env=env,
+                capture_failure_data=bool(export_failures),
+                timeout_seconds=test_file["timeout"],
             )
             futures.append(cast(concurrent.futures.Future[TestResult], fut))  # type: ignore
         for future in concurrent.futures.as_completed(futures):

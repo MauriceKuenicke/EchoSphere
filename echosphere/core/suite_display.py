@@ -12,7 +12,7 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 
-from echosphere.utils.sql_test_fetcher import get_sql_test_files
+from echosphere.utils.sql_test_fetcher import TestFileInfo, get_sql_test_files
 
 console = Console()
 
@@ -34,26 +34,29 @@ def display_no_tests_error() -> None:
     sys.exit(ERROR_EXIT_CODE)
 
 
-def display_test_names_table(subdir: str | None = None) -> None:
+def display_test_names_table(subdir: str | None = None, test_files: dict[str, TestFileInfo] | None = None) -> None:
     """
     Render a table of discovered test names.
 
     The table lists the base names of `.es.sql` files. If a test resides in a
     subsuite (subdirectory), the displayed name will be `subsuite/<test>`.
 
-    :param subdir: Optional subsuite name. If provided, only tests within
-                   this subsuite are shown. If None, shows all tests.
+    :param subdir: Optional subsuite name. If provided and `test_files` is not
+                   supplied, only tests within this subsuite are shown.
+    :param test_files: Optional pre-filtered mapping of tests to display.
+                       If omitted, tests are discovered via `get_sql_test_files`.
     :return: None
     """
-    test_files = get_sql_test_files(subdir=subdir)
+    if test_files is None:
+        test_files = get_sql_test_files(subdir=subdir)
     if not test_files:
         display_no_tests_error()
         return
 
     table = Table(TABLE_TITLE)
     for test_name, test_info in test_files.items():
-        display_name = test_name
-        if test_info["subfolder"]:
+        display_name = test_info["name"] or test_name
+        if test_info["subfolder"] and test_info["name"] is None:
             display_name = f"{test_info['subfolder']}/{test_name}"
         table.add_row(display_name)
 
