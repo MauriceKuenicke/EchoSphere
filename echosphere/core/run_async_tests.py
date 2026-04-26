@@ -81,8 +81,11 @@ def run_async_test_and_poll(
     :return: TestResult with pass/fail and details.
     """
     platform_name = PlatformExtractor.extract_platform_info(env_name=env)
-    if platform_name not in PlatformEnum:
-        raise Exception(f"Unsupported platform name found in .ini file. Should be one of: [{','.join(PlatformEnum)}]")
+    supported_platforms = [platform.value for platform in PlatformEnum]
+    if platform_name not in supported_platforms:
+        raise Exception(
+            f"Unsupported platform name found in .ini file. Should be one of: [{','.join(supported_platforms)}]"
+        )
 
     runner = get_db_runner(platform_name)
     try:

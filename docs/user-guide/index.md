@@ -11,10 +11,10 @@ This section covers day-to-day workflows, environment setup, writing effective t
 Use this guide if you prefer task-oriented, practical how‑to instructions.
 
 ## Typical Workflow
-1. Initialize: `es init --platform SNOWFLAKE` or `es init --platform POSTGRES` (also supports `DATABRICKS`, `SQLITE`, `TUTORIAL`)
+1. Initialize: `es init --platform snowflake` or `es init --platform postgres` (also supports `databricks`, `sqlite`, `tutorial`)
 2. Configure `es.ini` with credentials and defaults
 3. Create tests: add `.es.sql` files expressing assertions
-4. Run: `es run -e dev`
+4. Run: `es run -e env.<platform>.dev`
 5. Inspect output, and optionally export reports (JUnit XML / Excel)
 6. Commit tests to version control and run in CI
 
@@ -28,7 +28,7 @@ Use this guide if you prefer task-oriented, practical how‑to instructions.
 
 ## Environments
 Set your active environment via:
-- CLI: `es run --environment dev`
-- Environment variable: `ES_ENV_NAME=dev es run`
+- CLI: `es run --environment env.<platform>.dev`
+- Environment variable: `ES_ENV_NAME=env.<platform>.dev es run`
 
 See Reference → Configuration for the `es.ini` format and fields.

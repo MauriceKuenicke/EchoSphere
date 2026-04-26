@@ -56,15 +56,15 @@ pip install "EchoSphere[snowflake,postgres] @ git+https://github.com/MauriceKuen
 
 ### First-time setup
 ```sh
-es init --platform SQLITE
+es init --platform sqlite
 # or local guided starter:
-es init --platform TUTORIAL
+es init --platform tutorial
 ```
 This creates a default location for your SQL tests and a configuration file with environment stanzas.
-`TUTORIAL` additionally creates and seeds a local SQLite database.
+`tutorial` additionally creates and seeds a local SQLite database.
 
 ### Write your first test
-Create a file like tests/my_first_test.es.sql:
+Create a file like es_suite/my_first_test.es.sql:
 ```sql
 -- @name: Orders Total Validation
 -- @tag: critical, nightly
@@ -93,9 +93,9 @@ es run --tag critical
 es run --tag nightly --exclude-tag slow
 ```
 
-# Run with exports
-```
-es run --junitxml=test_result.xml --export-failures=failures.xlsx
+Run with exports:
+```sh
+es run --junitxml test_result.xml --export-failures failures.xlsx
 ```
 
 <p align="center">
@@ -108,6 +108,7 @@ es run --junitxml=test_result.xml --export-failures=failures.xlsx
 - Command Reference: https://mauricekuenicke.github.io/EchoSphere/command-reference/
 - Reference (Configuration, SQL syntax, API): https://mauricekuenicke.github.io/EchoSphere/reference/
 - Examples & Tutorials: https://mauricekuenicke.github.io/EchoSphere/examples/cookbook/
+- Tutorial Setup Walkthrough: https://mauricekuenicke.github.io/EchoSphere/examples/tutorial-setup/
 - Contributing: https://mauricekuenicke.github.io/EchoSphere/contributing/
 
 ## 🤝 Community & Support

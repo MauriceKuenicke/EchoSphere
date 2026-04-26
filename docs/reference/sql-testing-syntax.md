@@ -22,9 +22,9 @@ SELECT ...
 
 - `@name`: Friendly test name for terminal output and exports
 - `@tag`: Comma-separated tags for `es run --tag` and `es run --exclude-tag`
-- `@timeout`: Timeout in seconds for that test
+- `@timeout`: Timeout in seconds for that test (positive integer)
 
-Only leading comment lines are parsed as metadata.
+Only leading comment lines are parsed as metadata. Once SQL starts, later metadata comments are ignored.
 
 ### Assert Equality
 Return a row only when the value differs.

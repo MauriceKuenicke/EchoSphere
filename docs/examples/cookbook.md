@@ -31,7 +31,19 @@ WHERE total <> 123.45;
 
 ## Export Reports for CI Pipelines
 ```sh
-es run -e dev --junitxml reports/junit.xml
+es run -e env.snowflake.dev --junitxml reports/junit.xml
+```
+
+## Run by Tags
+```sh
+# include tags (OR semantics)
+es run --tag critical --tag nightly
+
+# CSV syntax is also supported
+es run --tag "critical,nightly"
+
+# exclude matching tags
+es run --exclude-tag slow
 ```
 
 ## Run a Subsuite Only
@@ -46,3 +58,11 @@ es view tests --suite smoke
 ```sh
 es view test integrity/no_duplicate_orders
 ```
+
+## Full Local Walkthrough
+See [Tutorial Setup Walkthrough](tutorial-setup.md) for an end-to-end local flow using:
+
+- `es init --platform tutorial`
+- metadata headers (`@name`, `@tag`, `@timeout`)
+- tag-based execution
+- JUnit + Excel exports

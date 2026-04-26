@@ -12,14 +12,14 @@ class TestSuiteDisplay:
     def test_display_test_names_table_shows_all(self, capsys) -> None:
         sd.display_test_names_table()
         out = capsys.readouterr().out.lower()
-        assert "example" in out
-        assert "hello/sub_test" in out
+        assert "example root test" in out
+        assert "example subsuite test" in out
 
     def test_display_test_names_table_filters_subdir(self, capsys) -> None:
         sd.display_test_names_table(subdir="hello")
         out = capsys.readouterr().out.lower()
-        assert "hello/sub_test" in out
-        assert "example" not in out
+        assert "example subsuite test" in out
+        assert "example root test" not in out
 
     def test_display_test_names_table_no_tests_exits(self, monkeypatch) -> None:
         monkeypatch.setattr(sd, "get_sql_test_files", lambda subdir=None: {})

@@ -22,6 +22,8 @@ Write tests as SQL, run them in parallel, and integrate the results into your CI
     <img src="assets/img/snowflake.svg" alt="Snowflake" width="48" style="vertical-align: -6px;" />
   &nbsp;&nbsp;
     <img src="assets/img/databricks.svg" alt="Databricks" width="48" style="vertical-align: -6px;" />
+  &nbsp;&nbsp;
+    <img src="assets/img/sqlite.svg" alt="SQLite" width="105" style="vertical-align: -10px;" scale="2" />
 </p>
 
 ## Why EchoSphere? ⚡
@@ -34,6 +36,7 @@ Write tests as SQL, run them in parallel, and integrate the results into your CI
 - [Getting Started](getting-started/index.md): installation, first setup, and a 5‑minute quickstart
 - [User Guide](user-guide/index.md): workflows, environment management, and writing effective tests
 - [Command Reference](command-reference/index.md): full CLI documentation for `es`
+- [Tutorial Walkthrough](examples/tutorial-setup.md): local `tutorial` setup with tags and exports
 - [Advanced Topics](advanced/ci-cd.md): CI/CD, performance, and extensions
 - [Troubleshooting](troubleshooting/index.md): common issues and debugging tips
 
@@ -52,4 +55,3 @@ FROM (
 )
 WHERE total <> 944870465.07;
 ```
-

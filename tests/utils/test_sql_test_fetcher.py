@@ -47,12 +47,26 @@ class TestGetSqlTestFiles:
             assert info["full_path"], "full_path should be populated"
             assert Path(info["full_path"]).exists(), f"{info['full_path']} should exist"
 
-    def test_metadata_defaults_when_not_present(self, example_suites_path: Path) -> None:
-        files = get_sql_test_files(path=str(example_suites_path))
-        info = files["example"]
+    def test_metadata_defaults_when_not_present(self, tmp_path: Path) -> None:
+        (tmp_path / "no_metadata.es.sql").write_text("SELECT 1;", encoding="utf-8")
+        files = get_sql_test_files(path=str(tmp_path))
+        info = files["no_metadata"]
         assert info["name"] is None
         assert info["tags"] == []
         assert info["timeout"] is None
+
+    def test_example_suite_metadata_is_available_out_of_the_box(self, example_suites_path: Path) -> None:
+        files = get_sql_test_files(path=str(example_suites_path))
+
+        root_test = files["example"]
+        assert root_test["name"] == "Example Root Test"
+        assert root_test["tags"] == ["example", "smoke"]
+        assert root_test["timeout"] == 15
+
+        sub_test = files["sub_test"]
+        assert sub_test["name"] == "Example Subsuite Test"
+        assert sub_test["tags"] == ["example", "subsuite"]
+        assert sub_test["timeout"] == 20
 
     def test_metadata_parsing_from_header_comments(self, tmp_path: Path) -> None:
         test_sql = """-- @name: Example Test

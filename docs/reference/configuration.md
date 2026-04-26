@@ -49,14 +49,17 @@ sslmode = ...  # optional
   - For SQLite: `database` (path to local sqlite database file).
 
 ## Selecting the Environment
-- CLI option: `es run --environment dev`
-- Environment variable: `ES_ENV_NAME=dev es run`
+- CLI option: `es run --environment env.snowflake.dev`
+- Environment variable: `ES_ENV_NAME=env.snowflake.dev es run`
 
 If neither is provided, EchoSphere uses the environment defined in `[default]`.
 
 ## Test Discovery
 - EchoSphere discovers tests with the `.es.sql` suffix.
-- Organize tests into subdirectories for logical grouping; all are discovered recursively.
+- By default, discovery path is `./es_suite`.
+- Supported locations are:
+  - `es_suite/*.es.sql`
+  - `es_suite/<subsuite>/*.es.sql`
 
 ## Runtime Options
 - Parallel execution is enabled by default to speed up test runs.

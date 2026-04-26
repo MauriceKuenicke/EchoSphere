@@ -9,7 +9,7 @@ EchoSphere tests are plain SQL files with the `.es.sql` suffix. A test passes wh
 
 Example layout:
 ```
-.es_suite/
+es_suite/
   smoke/
     orders_total.es.sql
   integrity/
@@ -38,9 +38,10 @@ SELECT ...
 
 - `@name`: Display name used in run output and reports
 - `@tag`: Comma-separated tags used for filtering (`es run --tag ...`, `es run --exclude-tag ...`)
-- `@timeout`: Per-test timeout in seconds
+- `@timeout`: Per-test timeout in seconds (positive integer)
 
 Metadata is only parsed from the leading comment block at the start of the file.
+When `@name` is present, it is shown in `es run` / `es view tests` output.
 
 ## Example Tests
 Validate a specific aggregation is as expected:
@@ -81,7 +82,7 @@ HAVING COUNT(*) > 1;
 ## Running and Inspecting
 Run all tests:
 ```sh
-es run -e dev
+es run -e env.snowflake.dev
 ```
 
 List discovered tests:

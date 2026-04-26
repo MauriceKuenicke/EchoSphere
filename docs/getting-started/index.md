@@ -35,30 +35,32 @@ This will install EchoSphere and all its dependencies into your local Python env
 After installation, run the init command to scaffold a test suite and configuration.
 
 ```sh
-es init --platform SNOWFLAKE
+es init --platform snowflake
 # SQLite quickstart (local file DB)
-es init --platform SQLITE
+es init --platform sqlite
 # Full local tutorial setup (SQLite + seeded DB)
-es init --platform TUTORIAL
+es init --platform tutorial
 ```
 
 This will:
-- Create a default folder for your SQL tests
+- Create the default `es_suite/` folder with example `.es.sql` tests
 - Create a configuration file for your platform credentials and environments
 
-Note: If you omit the platform, EchoSphere will ask for one. Use `--help` to list platforms or visit the documentation [here](../supported-platforms/index.md).
+Note: `--platform` is required. If omitted, `es init` exits with an error. Use `es init --help` to list valid values.
 
 ## Hello World: First Test
-1. Create a file named `example.es.sql` in your tests directory.
+1. Create a file named `example.es.sql` in `es_suite/`.
 2. Paste a simple query that fails only when your expectation is violated:
 
 ```sql
+-- @name: Hello World
+-- @tag: smoke
 SELECT 1 WHERE 1 <> 1;  -- returns zero rows, therefore passes
 ```
 
 3. Run the test suite:
 ```sh
-es run --environment dev
+es run
 ```
 
 - Success: exit code 0, no failing tests
@@ -74,8 +76,8 @@ Tip: You can export results to JUnit XML and export failing rows to Excel. See t
 
 ## 5‑Minute Quickstart
 1. Install EchoSphere
-2. Run `es init --platform SNOWFLAKE` (or `POSTGRES`, `DATABRICKS`, `SQLITE`, `TUTORIAL`)
+2. Run `es init --platform snowflake` (or `postgres`, `databricks`, `sqlite`, `tutorial`)
 3. Configure your platform credentials in `es.ini`
-4. Add `example.es.sql` with your first assertion query
-5. Run `es run -e dev` and inspect the output
-6. Optional: `es run -e dev --export-failures reports/failures.xlsx` to view failing test results in Excel
+4. Add `es_suite/example.es.sql` with your first assertion query
+5. Run `es run -e env.<platform>.dev` and inspect the output
+6. Optional: `es run --export-failures reports/failures.xlsx` to view failing test results in Excel

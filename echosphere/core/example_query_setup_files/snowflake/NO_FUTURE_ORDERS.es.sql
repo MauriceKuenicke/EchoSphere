@@ -1,3 +1,6 @@
+-- @name: No Future Orders
+-- @tag: example, snowflake, temporal
+-- @timeout: 60
 -- No orders should have dates in the future
 SELECT o_orderkey, o_orderdate
 FROM orders
