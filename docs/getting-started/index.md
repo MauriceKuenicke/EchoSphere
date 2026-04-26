@@ -16,10 +16,14 @@ This section helps you install EchoSphere, perform the first-time setup, and run
 EchoSphere does not contain the platform-specific drivers on a default install.
 Make sure to provide the extra dependencies for your platform of choice when installing EchoSphere.
 ```sh
-# Example Snowflake:
+# SQLite and tutorial (no extra dependencies needed — uses Python's built-in sqlite3):
+pip install "EchoSphere @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
+# Snowflake:
 pip install "EchoSphere[snowflake] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
-# Example Postgres:
+# Postgres:
 pip install "EchoSphere[postgres] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
+# Databricks:
+pip install "EchoSphere[databricks] @ git+https://github.com/MauriceKuenicke/EchoSphere.git"
 ```
 
 ### From source (development)

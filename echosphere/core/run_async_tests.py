@@ -10,9 +10,18 @@ from echosphere.core.platforms import PlatformEnum
 from echosphere.core.test_result import TestResult
 from echosphere.env_config_parser.PlatformExtractor import PlatformExtractor
 
-FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nMore than zero rows ({row_count}) detected.[/red]"
+FAILED_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql_preview}\nMore than zero rows ({row_count}) detected.[/red]"
 SUCCESS_TEST_MESSAGE = "{test_name}...[green bold]Passed[/green bold] [yellow bold]{execution_time}s[/yellow bold]"
-TIMEOUT_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql}\nExceeded timeout ({timeout}s).[/red]"
+TIMEOUT_TEST_MESSAGE = "{test_name}...[red bold]Failed[/red bold] [yellow bold]{execution_time}s[/yellow bold][red]\n{sql_preview}\nExceeded timeout ({timeout}s).[/red]"
+
+_SQL_PREVIEW_MAX_LINES = 10
+
+
+def _sql_preview(sql: str) -> str:
+    lines = sql.splitlines()
+    if len(lines) <= _SQL_PREVIEW_MAX_LINES:
+        return sql
+    return "\n".join(lines[:_SQL_PREVIEW_MAX_LINES]) + f"\n... ({len(lines) - _SQL_PREVIEW_MAX_LINES} more lines)"
 
 
 class _TestExecutionTimeoutError(Exception):
@@ -101,7 +110,7 @@ def run_async_test_and_poll(
         execution_time = float(timeout_seconds or 0)
         timeout_value = int(timeout_seconds or 0)
         timeout_msg = TIMEOUT_TEST_MESSAGE.format(
-            test_name=test_name, execution_time=execution_time, sql=sql, timeout=timeout_value
+            test_name=test_name, execution_time=execution_time, sql_preview=_sql_preview(sql), timeout=timeout_value
         )
         print(timeout_msg)
         return TestResult(
@@ -121,7 +130,7 @@ def run_async_test_and_poll(
 
     if failed:
         error_msg = FAILED_TEST_MESSAGE.format(
-            test_name=test_name, execution_time=execution_time, sql=sql, row_count=row_count
+            test_name=test_name, execution_time=execution_time, sql_preview=_sql_preview(sql), row_count=row_count
         )
         print(error_msg)
 

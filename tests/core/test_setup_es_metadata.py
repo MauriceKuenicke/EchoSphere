@@ -9,14 +9,14 @@ def test_setup_es_directory_provides_metadata_in_sqlite_examples(tmp_path: Path)
     setup_es_directory(dir_name=str(suite_dir), platform="sqlite")
 
     files = get_sql_test_files(path=str(suite_dir))
-    assert set(files.keys()) == {"check_existence", "table_does_not_exist"}
+    assert set(files.keys()) == {"always_fail", "always_pass"}
 
-    check_existence = files["check_existence"]
-    assert check_existence["name"] == "SQLite Example - Check Existence"
-    assert check_existence["tags"] == ["example", "should-fail", "sqlite"]
-    assert check_existence["timeout"] == 30
+    always_fail = files["always_fail"]
+    assert always_fail["name"] == "SQLite Example - Always Fail"
+    assert always_fail["tags"] == ["example", "should-fail", "sqlite"]
+    assert always_fail["timeout"] == 30
 
-    table_does_not_exist = files["table_does_not_exist"]
-    assert table_does_not_exist["name"] == "SQLite Example - Table Does Not Exist"
-    assert table_does_not_exist["tags"] == ["example", "should-pass", "sqlite"]
-    assert table_does_not_exist["timeout"] == 30
+    always_pass = files["always_pass"]
+    assert always_pass["name"] == "SQLite Example - Always Pass"
+    assert always_pass["tags"] == ["example", "should-pass", "sqlite"]
+    assert always_pass["timeout"] == 30

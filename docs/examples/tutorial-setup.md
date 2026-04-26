@@ -24,7 +24,10 @@ This creates:
 es run
 ```
 
-The bundled tutorial tests include metadata in-file (`@name`, `@tag`, `@timeout`) and are displayed using their `@name` values.
+The bundled tutorial tests include metadata in-file (`@name`, `@tag`, `@timeout`) and are displayed using their `@name` values:
+
+- **SQLite Example - Always Fail** — tagged `should-fail`: always returns a row (intentional failure demo)
+- **SQLite Example - Always Pass** — tagged `should-pass`: always returns zero rows (passing test demo)
 
 ## 3. Filter execution by tags
 

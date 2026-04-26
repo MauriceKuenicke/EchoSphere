@@ -26,8 +26,8 @@ def patch_suite_display_fetcher(monkeypatch: pytest.MonkeyPatch, example_suites_
     from echosphere.core import suite_display as sd
     from echosphere.utils import sql_test_fetcher as fetcher
 
-    def replacement(subdir: str | None = None):
-        return fetcher.get_sql_test_files(path=str(example_suites_path), subdir=subdir)
+    def replacement(subdir: str | None = None, root_only: bool = False):
+        return fetcher.get_sql_test_files(path=str(example_suites_path), subdir=subdir, root_only=root_only)
 
     monkeypatch.setattr(sd, "get_sql_test_files", replacement)
     yield
