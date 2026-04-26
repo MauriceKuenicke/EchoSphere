@@ -9,8 +9,14 @@ class TestSuiteDisplay:
             sd.display_no_tests_error()
         assert ex.value.code == -1
 
-    def test_display_test_names_table_shows_all(self, capsys) -> None:
-        sd.display_test_names_table()
+    def test_display_test_names_table_shows_root_only(self, capsys) -> None:
+        sd.display_test_names_table(root_only=True)
+        out = capsys.readouterr().out.lower()
+        assert "example root test" in out
+        assert "example subsuite test" not in out
+
+    def test_display_test_names_table_shows_all_including_subsuites(self, capsys) -> None:
+        sd.display_test_names_table(root_only=False)
         out = capsys.readouterr().out.lower()
         assert "example root test" in out
         assert "example subsuite test" in out
@@ -22,7 +28,7 @@ class TestSuiteDisplay:
         assert "example root test" not in out
 
     def test_display_test_names_table_no_tests_exits(self, monkeypatch) -> None:
-        monkeypatch.setattr(sd, "get_sql_test_files", lambda subdir=None: {})
+        monkeypatch.setattr(sd, "get_sql_test_files", lambda subdir=None, root_only=False: {})
         with pytest.raises(SystemExit) as ex:
             sd.display_test_names_table()
         assert ex.value.code == -1

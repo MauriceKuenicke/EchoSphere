@@ -162,6 +162,11 @@ def run_suite(
         for test_key, test_info in all_test_files.items()
         if _should_run_test(test_info["tags"], include_tags, exclude_tags)
     }
+    filters_active = bool(include_tags or exclude_tags)
+
+    if not test_files and filters_active:
+        print("[bold]No tests matched the provided filters.[/bold]")
+        sys.exit(0)
 
     print("================================================================")
     print("[bold]Test Suite[/bold]")
@@ -214,6 +219,9 @@ def run_suite(
     cum_t = round(e_t - s_t, 3)
     print("================================================================")
     if len(results) == 0:
+        if filters_active:
+            print("[bold]No tests matched the provided filters.[/bold]")
+            sys.exit(0)
         print("[bold]No Tests Executed.[/bold]")
         sys.exit(-1)
     if all(r.passed for r in results):

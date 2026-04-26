@@ -88,3 +88,5 @@ def init_es(platform: Union[str, PlatformEnum], dir_name: str = ES_SUITE_TO_BE_C
     platform_key = platform.value if isinstance(platform, PlatformEnum) else platform
     if platform_key == PlatformEnum.TUTORIAL.value:
         setup_tutorial_sqlite_database()
+    elif platform_key == PlatformEnum.SQLITE.value:
+        typer.echo("Next step: open 'es.ini' and set 'database' to the path of your SQLite file.")

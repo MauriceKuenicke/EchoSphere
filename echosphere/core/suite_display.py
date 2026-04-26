@@ -34,7 +34,11 @@ def display_no_tests_error() -> None:
     sys.exit(ERROR_EXIT_CODE)
 
 
-def display_test_names_table(subdir: str | None = None, test_files: dict[str, TestFileInfo] | None = None) -> None:
+def display_test_names_table(
+    subdir: str | None = None,
+    test_files: dict[str, TestFileInfo] | None = None,
+    root_only: bool = False,
+) -> None:
     """
     Render a table of discovered test names.
 
@@ -45,10 +49,12 @@ def display_test_names_table(subdir: str | None = None, test_files: dict[str, Te
                    supplied, only tests within this subsuite are shown.
     :param test_files: Optional pre-filtered mapping of tests to display.
                        If omitted, tests are discovered via `get_sql_test_files`.
+    :param root_only: If True and `test_files` is not supplied, show only
+                      root-level tests (no subsuites).
     :return: None
     """
     if test_files is None:
-        test_files = get_sql_test_files(subdir=subdir)
+        test_files = get_sql_test_files(subdir=subdir, root_only=root_only)
     if not test_files:
         display_no_tests_error()
         return
@@ -87,11 +93,17 @@ def display_test_sql_code(test_identifier: str) -> None:
     test_files = get_sql_test_files(subdir=subsuite)
     normalized_name = test_name.lower()
 
-    # Check if the test exists
+    # Fall back to @name match when file-stem lookup fails
     if normalized_name not in test_files:
-        console.print(ERROR_TEST_NOT_FOUND.format(test_identifier))
-        console.print("Available tests:", ", ".join(sorted(test_files.keys())))
-        sys.exit(ERROR_EXIT_CODE)
+        matched = next(
+            (key for key, info in test_files.items() if (info.get("name") or "").lower() == normalized_name),
+            None,
+        )
+        if matched is None:
+            console.print(ERROR_TEST_NOT_FOUND.format(test_identifier))
+            console.print("Available tests (use file name or @name):", ", ".join(sorted(test_files.keys())))
+            sys.exit(ERROR_EXIT_CODE)
+        normalized_name = matched
 
     # Get file path
     test_file = test_files[normalized_name]

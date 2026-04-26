@@ -84,7 +84,11 @@ def parse_sql_test_metadata(file_path: str) -> tuple[str | None, list[str], int 
     return name, deduped_tags, timeout
 
 
-def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> dict[str, TestFileInfo]:
+def get_sql_test_files(
+    path: str = "./es_suite",
+    subdir: str | None = None,
+    root_only: bool = False,
+) -> dict[str, TestFileInfo]:
     """
     Generates a dictionary of SQL test file identifiers and their corresponding file information
     from the specified directory and its immediate subfolders. The function searches for files
@@ -95,6 +99,8 @@ def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> d
     :param path: Directory path where the `.es.sql` test files are stored. Defaults to "./es_suite".
     :param subdir: Optional subfolder name to filter results. If provided, only
                    files from this subfolder will be included.
+    :param root_only: If True, only return tests in the root of `path` (no subfolders).
+                      Ignored when `subdir` is set.
     :return: A dictionary mapping the base names of the `.es.sql` files to dictionaries containing:
              - 'full_path': The complete path to the file
              - 'subfolder': The subfolder name if the file is in a subfolder, None otherwise
@@ -112,11 +118,15 @@ def get_sql_test_files(path: str = "./es_suite", subdir: str | None = None) -> d
     # Create the result dictionary
     file_info: dict[str, TestFileInfo] = {}
 
-    # Process all files with the SQL extension (both in the main dir and subfolders)
-    all_patterns = [
-        os.path.join(path, f"*{SQL_FILE_EXT}"),  # Main directory
-        os.path.join(path, "*", f"*{SQL_FILE_EXT}"),  # Subfolders
-    ]
+    # Process all files with the SQL extension (root only, or root + subfolders)
+    all_patterns = (
+        [os.path.join(path, f"*{SQL_FILE_EXT}")]
+        if root_only and not subdir
+        else [
+            os.path.join(path, f"*{SQL_FILE_EXT}"),  # Main directory
+            os.path.join(path, "*", f"*{SQL_FILE_EXT}"),  # Subfolders
+        ]
+    )
 
     for pattern in all_patterns:
         for file_path in glob.glob(pattern):
