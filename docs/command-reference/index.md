@@ -1,5 +1,7 @@
 # Command Reference
 
+The `es` CLI is the operational core of EchoSphere's "pytest for databases" workflow.
+
 This section documents all EchoSphere CLI commands, their options, and examples.
 
 EchoSphere uses the `es` command with subcommands.

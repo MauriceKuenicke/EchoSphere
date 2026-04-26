@@ -1,5 +1,7 @@
 # Getting Started
 
+> EchoSphere is **pytest for databases**: test your database like you test your code.
+
 This section helps you install EchoSphere, perform the first-time setup, and run a “Hello World” test in minutes.
 
 - Installation
@@ -73,6 +75,7 @@ Tip: You can export results to JUnit XML and export failing rows to Excel. See t
 - Naming: use the `.es.sql` suffix so EchoSphere can discover your tests.
 - Environments: define credentials and defaults in `es.ini` for your platform; select at runtime with `--environment` or the `ES_ENV_NAME` env var.
 - Parallelism: tests are executed concurrently to minimize runtime.
+- Authoring model: plain SQL test files, no custom DSL.
 
 ## 5‑Minute Quickstart
 1. Install EchoSphere

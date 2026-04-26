@@ -1,5 +1,7 @@
 # User Guide
 
+> EchoSphere is **pytest for databases** with a SQL-first, developer-native workflow.
+
 This section covers day-to-day workflows, environment setup, writing effective tests, and how to run and read results.
 
 - Commands overview
